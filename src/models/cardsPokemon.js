@@ -32,5 +32,15 @@ module.exports = {
                 else resolve(rows[0]);
             });
         });
-    }
+    },
+
+    async getTotalRecords()
+    {
+        return new Promise(resolve => {
+            db.query(`SELECT COUNT(*) AS total FROM ${this.table}`, (err, rows) => {
+                if(err) console.log(err);
+                else resolve(rows[0] && rows[0].total ? parseInt(rows[0].total) : 0);
+            });
+        });
+    },
 };
