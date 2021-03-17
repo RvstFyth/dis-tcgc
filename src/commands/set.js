@@ -9,6 +9,7 @@ module.exports = {
     async run(msg, args, data)
     {
         const owned = args.filter(a => ['-owned', '-o'].indexOf(a) > -1).length;
+        const missing = args.filter(a => ['-missing', '-m'].indexOf(a) > -1).length;
 
         args = args.filter(a => !a.startsWith('-'));
 
@@ -17,6 +18,7 @@ module.exports = {
         const input = args.join(' ');
         let cards;
         if(owned) cards = await cardsPokemonModel.getCardsForSetForUserOwned(input, msg.author.id);
+        else if(missing) cards = await cardsPokemonModel.getCardsForSetForUserMissing(input, msg.author.id);
         else cards = await cardsPokemonModel.getCardsForSetForUser(input, msg.author.id);
 
         if(!cards || !cards.length) return msg.channel.send(`**${msg.author.username}** no cards found..`);
