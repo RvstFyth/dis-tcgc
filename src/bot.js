@@ -98,10 +98,23 @@ client.on('message', async (msg) => {
             // Check is user is registered
             const user = await usersModel.getForDiscordID(msg.author.id);
             if(user) {
+
                 const card = await cardsPokemonModel.getRandom();
                 const imagePathSplitted = card.image_large.split('/');
-                await userCardsPokemonModel.create(msg.author.id, card.id, 1);
-                await msg.author.send(`You got a #${card.id} - ${card.name} (${card.set})`, {
+                await userCardsPokemonModel.add(msg.author.id, card.id, 1);
+
+                let description = `` +
+                    `Set: ${card.set}\n` +
+                    `ID: ${card.id}`;
+                const embed = {
+                    title: card.name,
+                    description,
+                    image: {
+                        url: `attachment://${imagePathSplitted[imagePathSplitted.length - 1]}`
+                    }
+                };
+                await msg.channel.send( {
+                    embed,
                     files: [{
                         attachment: card.image_large,
                         name: imagePathSplitted[imagePathSplitted.length - 1]

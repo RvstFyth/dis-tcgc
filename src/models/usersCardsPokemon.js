@@ -14,6 +14,38 @@ module.exports = {
         });
     },
 
+    async add(userID, cardID, amount)
+    {
+        const existing = await this.getForUser(userID, cardID);
+        if(existing) return this.addAmount(userID, cardID, amount);
+        else return this.create(userID, cardID, amount);
+    },
+
+    async addAmount(userID, cardID, amount)
+    {
+        return new Promise(resolve => {
+            db.query(`UPDATE ${this.table} SET amount = amount + ? WHERE user_id = ? AND card_id = ?`, [amount,userID,cardID], (err) => {
+                if(err) console.log(err);
+                else resolve(true);
+            });
+        });
+    },
+
+    async getForUser(userID, cardID)
+    {
+        return new Promise(resolve => {
+            db.query(`
+                        SELECT uc.*, cp.name, cp.id, cp.set FROM ${this.table} AS uc
+                        INNER JOIN cards_pokemon AS cp ON uc.card_id = cp.id 
+                        WHERE user_id = ? AND card_id = ?
+                        `,
+                [userID, cardID], (err, rows) => {
+                    if(err) console.log(err);
+                    else resolve(rows[0]);
+                });
+        });
+    },
+
     async getForUserPaginated(userID, offset, limit)
     {
         return new Promise(resolve => {
