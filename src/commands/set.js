@@ -49,18 +49,33 @@ module.exports = {
                 text: `Page: ${page}/${maxPage} | ${data.length} total in this set`
             }
         };
-
-        return msg.channel.send({embed}).then(async message => {
-            if(page < maxPage) {
-                await message.react(emojis.next);
-                const filter = (reaction, user) => reaction.emoji.name === emojis.next && user.id === msg.author.id;
-                message.awaitReactions(filter, {time: 60000, max: 1}).then(collected => {
-                    const reaction = collected.first();
-                    if (reaction) {
-                        return this.postEmbed(msg, data, page + 1);
-                    }
-                });
-            }
-        });
+        if(originalEmbed) {
+            return originalEmbed.edit({embed}).then(async message => {
+                if (page < maxPage) {
+                    await message.react(emojis.next);
+                    const filter = (reaction, user) => reaction.emoji.name === emojis.next && user.id === msg.author.id;
+                    message.awaitReactions(filter, {time: 60000, max: 1}).then(collected => {
+                        const reaction = collected.first();
+                        if (reaction) {
+                            return this.postEmbed(msg, data, page + 1, message);
+                        }
+                    });
+                }
+            });
+        }
+        else {
+            return msg.channel.send({embed}).then(async message => {
+                if (page < maxPage) {
+                    await message.react(emojis.next);
+                    const filter = (reaction, user) => reaction.emoji.name === emojis.next && user.id === msg.author.id;
+                    message.awaitReactions(filter, {time: 60000, max: 1}).then(collected => {
+                        const reaction = collected.first();
+                        if (reaction) {
+                            return this.postEmbed(msg, data, page + 1, message);
+                        }
+                    });
+                }
+            });
+        }
     }
 };
