@@ -31,7 +31,7 @@ module.exports = {
             description += `#${cards[i].id} - ${cards[i].name} (${cards[i].set}) (${cards[i].amount}x)\n`;
         }
 
-        if(!description) description = 'You have not collected any cards yet..';
+        if(!description) description = duplicates ? 'You don\'t have any duplicates..' : 'You have not collected any cards yet..';
 
         const embed = {
             title: `${msg.author.username}'s collection`,
