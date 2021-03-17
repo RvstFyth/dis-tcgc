@@ -114,7 +114,7 @@ client.on('message', async (msg) => {
                         url: `attachment://${imagePathSplitted[imagePathSplitted.length - 1]}`
                     }
                 };
-                await msg.channel.send( {
+                await msg.author.send( {
                     embed,
                     files: [{
                         attachment: card.image_large,
