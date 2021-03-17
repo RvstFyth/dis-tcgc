@@ -20,7 +20,9 @@ module.exports = {
         const limit = 15;
         const maxPage = Math.ceil(totalUserCards / limit);
         if (page > maxPage) page = maxPage;
-        const offset = page * limit - limit;
+        let offset = page * limit - limit;
+
+        if(offset < 0) offset = 0;
 
         let cards;
         if(duplicates) cards = await usersCardsPokemonModel.getDuplicatesForUserPaginated(msg.author.id, offset, limit);
