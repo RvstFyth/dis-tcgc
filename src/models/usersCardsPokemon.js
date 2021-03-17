@@ -46,6 +46,36 @@ module.exports = {
         });
     },
 
+    async getDuplicatesForUser(userID)
+    {
+        return new Promise(resolve => {
+            db.query(`
+                        SELECT uc.*, cp.name, cp.id, cp.set FROM ${this.table} AS uc
+                        INNER JOIN cards_pokemon AS cp ON uc.card_id = cp.id 
+                        WHERE user_id = ? AND uc.amount > 0
+                        `,
+                [userID], (err, rows) => {
+                    if(err) console.log(err);
+                    else resolve(rows);
+                });
+        });
+    },
+
+    async getDuplicatesForUserPaginated(userID, offset, limit)
+    {
+        return new Promise(resolve => {
+            db.query(`
+                        SELECT uc.*, cp.name, cp.id, cp.set FROM ${this.table} AS uc
+                        INNER JOIN cards_pokemon AS cp ON uc.card_id = cp.id 
+                        WHERE user_id = ? AND uc.amount > 1 LIMIT ?, ?
+                        `,
+                [userID, offset, limit], (err, rows) => {
+                    if(err) console.log(err);
+                    else resolve(rows);
+                });
+        });
+    },
+
     async getForUserPaginated(userID, offset, limit)
     {
         return new Promise(resolve => {

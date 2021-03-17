@@ -5,6 +5,10 @@ module.exports = {
 
     async run(msg, args, data)
     {
+
+        const duplicates = args.filter(a => ['-duplicates', '-d'].indexOf(a) > -1).length;
+        args = args.filter(a => !a.startsWith('-'));
+
         let page = 1;
         if(!isNaN(args[0])) page = parseInt(args[0]);
         else {
@@ -18,7 +22,10 @@ module.exports = {
         if (page > maxPage) page = maxPage;
         const offset = page * limit - limit;
 
-        const cards = await usersCardsPokemonModel.getForUserPaginated(msg.author.id, offset, limit);
+        let cards;
+        if(duplicates) cards = await usersCardsPokemonModel.getDuplicatesForUserPaginated(msg.author.id, offset, limit);
+        else cards = await usersCardsPokemonModel.getForUserPaginated(msg.author.id, offset, limit);
+
         let description = '';
         for(let i in cards) {
             description += `#${cards[i].id} - ${cards[i].name} (${cards[i].set}) (${cards[i].amount}x)\n`;
