@@ -9,7 +9,20 @@ module.exports = {
         const card = await cardsPokemonModel.get(ID);
         if(!card) return msg.channel.send(`**${msg.author.username}** there is no card with ID ${ID}.`);
         const imagePathSplitted = card.image_large.split('/');
-        await msg.channel.send(`Card #${card.id} - ${card.name} (${card.set})`, {
+
+        let description = `` +
+            `Set: ${card.set}\n` +
+            `ID: ${card.id}`;
+
+        const embed = {
+            title: card.name,
+            description,
+            image: {
+                url: `attachment://${imagePathSplitted[imagePathSplitted.length - 1]}`
+            }
+        };
+        await msg.channel.send( {
+            embed,
             files: [{
                 attachment: card.image_large,
                 name: imagePathSplitted[imagePathSplitted.length - 1]
