@@ -7,6 +7,7 @@ const config = require('./config');
 const commandsHelper = require('./helpers/commands');
 const logger = require('./helpers/logger');
 const valuesHelper = require('./helpers/values');
+const random = require('./helpers/random');
 
 // Initialize modules
 db.init();
@@ -14,6 +15,9 @@ commandsHelper.loadCommands(`${__dirname}/commands/`);
 logger.init();
 
 const usersModel = require('./models/users');
+const cardsPokemonModel = require('./models/cardsPokemon');
+const userCardsPokemonModel = require('./models/usersCardsPokemon');
+
 const client = new discord.Client();
 
 client.on('ready', async () => {
@@ -35,6 +39,7 @@ client.on('ready', async () => {
 });
 
 client.on('message', async (msg) => {
+
     if (
         msg.guild &&
         !msg.guild.me.permissionsIn(msg.channel.id).has('SEND_MESSAGES')
@@ -85,6 +90,24 @@ client.on('message', async (msg) => {
             if (args[0] && module && module.sub && module.sub[args[0]]) {
                 module.sub[args[0]].run(msg, args.splice(1), data);
             } else if (module && module.main) module.main.run(msg, args, data);
+        }
+    }
+    else {
+        const num = random.number(1, 100);
+        if(1===1 || random.number(1, 100) === num) {
+            // Check is user is registered
+            const user = await usersModel.getForDiscordID(msg.author.id);
+            if(user) {
+                const card = await cardsPokemonModel.getRandom();
+                const imagePathSplitted = card.image_large.split('/');
+                await userCardsPokemonModel.create(msg.author.id, card.id, 1);
+                await msg.author.send(`You got a #${card.id} - ${card.name} (${card.set})`, {
+                    files: [{
+                        attachment: card.image_large,
+                        name: imagePathSplitted[imagePathSplitted.length - 1]
+                    }]
+                });
+            }
         }
     }
 });
