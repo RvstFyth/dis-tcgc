@@ -43,4 +43,14 @@ module.exports = {
             });
         });
     },
+
+    async getDistinctSetNames()
+    {
+        return new Promise(resolve => {
+            db.query(`SELECT DISTINCT \`set\` FROM ${this.table} ORDER BY \`set\``, (err, rows) => {
+                if(err) console.log(err);
+                else resolve(rows.map(r => r.set));
+            });
+        });
+    },
 };
