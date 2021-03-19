@@ -90,7 +90,7 @@ client.on('message', async (msg) => {
                 module.sub[args[0]].run(msg, args.splice(1), data);
             } else if (module && module.main) module.main.run(msg, args, data);
         }
-    } else {
+    } else if (msg.guild) {
         const num = random.number(1, 100);
         const num2 = random.number(1, 100);
         if (random.number(1, 100) === num || random.number(1, 100) === num2) {
