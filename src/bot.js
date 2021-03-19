@@ -39,7 +39,6 @@ client.on('ready', async () => {
 });
 
 client.on('message', async (msg) => {
-
     if (
         msg.guild &&
         !msg.guild.me.permissionsIn(msg.channel.id).has('SEND_MESSAGES')
@@ -91,35 +90,36 @@ client.on('message', async (msg) => {
                 module.sub[args[0]].run(msg, args.splice(1), data);
             } else if (module && module.main) module.main.run(msg, args, data);
         }
-    }
-    else {
+    } else {
         const num = random.number(1, 100);
         const num2 = random.number(1, 100);
-        if(random.number(1, 100) === num || random.number(1, 100) === num2) {
+        if (random.number(1, 100) === num || random.number(1, 100) === num2) {
             // Check is user is registered
             const user = await usersModel.getForDiscordID(msg.author.id);
-            if(user) {
-
+            if (user) {
                 const card = await cardsPokemonModel.getRandom();
                 const imagePathSplitted = card.image_large.split('/');
                 await userCardsPokemonModel.add(msg.author.id, card.id, 1);
 
-                let description = `` +
-                    `Set: ${card.set}\n` +
-                    `ID: ${card.id}`;
+                let description = `` + `Set: ${card.set}\n` + `ID: ${card.id}`;
                 const embed = {
                     title: card.name,
                     description,
                     image: {
-                        url: `attachment://${imagePathSplitted[imagePathSplitted.length - 1]}`
-                    }
+                        url: `attachment://${
+                            imagePathSplitted[imagePathSplitted.length - 1]
+                        }`,
+                    },
                 };
-                await msg.author.send( {
+                await msg.author.send({
                     embed,
-                    files: [{
-                        attachment: card.image_large,
-                        name: imagePathSplitted[imagePathSplitted.length - 1]
-                    }]
+                    files: [
+                        {
+                            attachment: card.image_large,
+                            name:
+                                imagePathSplitted[imagePathSplitted.length - 1],
+                        },
+                    ],
                 });
             }
         }
