@@ -3,7 +3,8 @@ module.exports = {
         let description =
             `Collect pokemon cards by just chatting! The bot will send a DM when you received a card. ` +
             `The bot only needs the perms to read messages to get started. It's advised to create a separate ` +
-            `channel where the bot can post messages.` +
+            `channel where the bot can post messages. \n\nYou can trigger commands in a DM with the bot, but no cards will drop ` +
+            `from DMs. Spamming and abuse won't be tolerated and can result in being banned!` +
             `\n\n\`,start\` Creates a account and start collecting cards!\n` +
             `\`,cards\` See the cards you collected\n` +
             `\`,card [id]\` Query card data\n` +
