@@ -104,7 +104,7 @@ client.on('message', async (msg) => {
                 const card = await cardsPokemonModel.getRandom();
                 const imagePathSplitted = card.image_large.split('/');
                 await userCardsPokemonModel.add(msg.author.id, card.id, 1);
-                const coins = random.number(5, 25);
+                const coins = random.number(5, 15);
                 await usersModel.addCoins(msg.author.id, coins);
                 let description =
                     `Name: ${card.name}\n` +
