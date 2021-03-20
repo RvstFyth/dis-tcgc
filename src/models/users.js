@@ -7,7 +7,7 @@ module.exports = {
     create(discord_id) {
         return new Promise((resolve) => {
             db.query(
-                "INSERT INTO users (`discord_id`, `created_timestamp`, last_drop) VALUES (?,?, 0)",
+                'INSERT INTO users (`discord_id`, `created_timestamp`, last_drop) VALUES (?,?, 0)',
                 [discord_id, valuesHelper.currentTimestamp()],
                 (err, res) => {
                     if (err) {
@@ -55,10 +55,10 @@ module.exports = {
         });
     },
 
-    async addGold(id, amount) {
+    async addCoins(id, amount) {
         return new Promise((resolve) => {
             db.query(
-                `UPDATE ${this.table} SET gold = gold + ? WHERE id = ?`,
+                `UPDATE ${this.table} SET coins = coins + ? WHERE discord_id = ?`,
                 [amount, id],
                 (err) => {
                     if (err) console.log(err);
