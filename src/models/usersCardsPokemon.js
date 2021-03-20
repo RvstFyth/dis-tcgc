@@ -35,6 +35,33 @@ module.exports = {
         });
     },
 
+    async setAmount(userID, cardID, amount) {
+        if (amount < 1) return this.deleteFor(userID, cardID);
+        return new Promise((resolve) => {
+            db.query(
+                `UPDATE ${this.table} SET amount = ? WHERE user_id = ? AND card_id = ?`,
+                [amount, userID, cardID],
+                (err) => {
+                    if (err) console.log(err);
+                    else resolve(true);
+                }
+            );
+        });
+    },
+
+    async deleteFor(userID, cardID) {
+        return new Promise((resolve) => {
+            db.query(
+                `DELETE FROM ${this.table} WHERE user_id = ? AND card_id = ?`,
+                [userID, cardID],
+                (err) => {
+                    if (err) console.log(err);
+                    else resolve(true);
+                }
+            );
+        });
+    },
+
     async getForUser(userID, cardID) {
         return new Promise((resolve) => {
             db.query(
