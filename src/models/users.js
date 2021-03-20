@@ -68,10 +68,10 @@ module.exports = {
         });
     },
 
-    async setGold(id, amount) {
+    async setCoins(id, amount) {
         return new Promise((resolve) => {
             db.query(
-                `UPDATE ${this.table} SET gold = ? WHERE id = ?`,
+                `UPDATE ${this.table} SET coins = ? WHERE discord_id = ?`,
                 [amount, id],
                 (err) => {
                     if (err) console.log(err);

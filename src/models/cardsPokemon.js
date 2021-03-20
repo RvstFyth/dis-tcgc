@@ -40,6 +40,19 @@ module.exports = {
         });
     },
 
+    async getRandomForSet(set) {
+        return new Promise((resolve) => {
+            db.query(
+                `SELECT * FROM ${this.table} WHERE \`set\` = ? ORDER BY RAND() LIMIT 1`,
+                [set],
+                (err, rows) => {
+                    if (err) console.log(err);
+                    else resolve(rows[0]);
+                }
+            );
+        });
+    },
+
     async getTotalRecords() {
         return new Promise((resolve) => {
             db.query(
