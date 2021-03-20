@@ -93,22 +93,34 @@ client.on('message', async (msg) => {
     } else if (msg.guild) {
         const num = random.number(1, 100);
         const num2 = random.number(1, 100);
-        if (random.number(1, 100) === num || random.number(1, 100) === num2) {
+        if (
+            1 === 1 ||
+            random.number(1, 100) === num ||
+            random.number(1, 100) === num2
+        ) {
             // Check is user is registered
             const user = await usersModel.getForDiscordID(msg.author.id);
             if (user) {
                 const card = await cardsPokemonModel.getRandom();
                 const imagePathSplitted = card.image_large.split('/');
                 await userCardsPokemonModel.add(msg.author.id, card.id, 1);
+                const coins = random.number(5, 25);
+                await usersModel.addCoins(msg.author.id, coins);
+                let description =
+                    `Name: ${card.name}\n` +
+                    `Set: ${card.set}\n` +
+                    `ID: ${card.id}`;
 
-                let description = `` + `Set: ${card.set}\n` + `ID: ${card.id}`;
                 const embed = {
-                    title: card.name,
+                    title: `You got a new card!`,
                     description,
                     image: {
                         url: `attachment://${
                             imagePathSplitted[imagePathSplitted.length - 1]
                         }`,
+                    },
+                    footer: {
+                        text: `You got ${coins} coins!`,
                     },
                 };
                 await msg.author.send({
