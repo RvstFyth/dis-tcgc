@@ -15,8 +15,7 @@ app.post('/webhooks', async function (request, response) {
             `Donatebot.io webhook triggered | Status: ${webhook.status}`
         );
         if (webhook.status.toLowerCase() === 'completed') {
-            console.log(webhook);
-            const discordID = webhook.buyer_id;
+            const discordID = webhook.raw_buyer_id;
             const coins = parseInt(webhook.price) * 150;
             let user = await usersModel.getForDiscordID(discordID);
             if (!user) user = '377092395931795458';
