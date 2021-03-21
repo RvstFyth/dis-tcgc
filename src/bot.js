@@ -120,16 +120,22 @@ client.on('message', async (msg) => {
                         text: `You got ${coins} coins!`,
                     },
                 };
-                await msg.author.send({
-                    embed,
-                    files: [
-                        {
-                            attachment: card.image_large,
-                            name:
-                                imagePathSplitted[imagePathSplitted.length - 1],
-                        },
-                    ],
-                });
+                try {
+                    await msg.author.send({
+                        embed,
+                        files: [
+                            {
+                                attachment: card.image_large,
+                                name:
+                                    imagePathSplitted[
+                                        imagePathSplitted.length - 1
+                                    ],
+                            },
+                        ],
+                    });
+                } catch (e) {
+                    console.log(e);
+                }
             }
         }
     }
