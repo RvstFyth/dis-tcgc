@@ -16,12 +16,12 @@ app.post('/webhooks', async function (request, response) {
         );
         if (webhook.status.toLowerCase() === 'completed') {
             const discordID = webhook.buyer_id;
-            const coins = Math.round(webhook.price) * 150;
+            const coins = parseInt(webhook.price) * 150;
             let user = await usersModel.getForDiscordID(discordID);
             if (!user) user = '377092395931795458';
             if (user) {
                 console.log(
-                    `Received a ${webhook.price} USD dollar donation from ${user.name}`
+                    `Received a ${webhook.price} USD dollar donation from ${discordID}`
                 );
                 await usersModel.addCoins(discordID, coins);
             } else
