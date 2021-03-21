@@ -16,13 +16,20 @@ module.exports = {
             `\`,set [name] -m\` Shows all cards you are missing from a set\n` +
             `\`,set [name] -o\` Shows all cards you own from a set\n` +
             `\`,search [argument]\` Search cards on name\n` +
-            `\`,search [argument] 2\` Go to second page of search result\n` +
+            `\`,search [argument] 2\` Go to second page of search result\n\n` +
             `\`,hourly\` Claim hourly bonus\n` +
-            `\`,daily\` Claim daily bonus`;
+            `\`,daily\` Claim daily bonus\n` +
+            `\`,donate\` Support the development of this bot and get rewards!`;
 
         const embed = {
             title: 'help',
             description,
+            fields: [
+                {
+                    name: `\u200b`,
+                    value: `[Support server](https://discord.gg/Un9vEZUqNu) | [Donate with paypal/cc](https://donatebot.io/checkout/823144389714378752)`,
+                },
+            ],
         };
 
         return msg.channel.send({ embed });
