@@ -36,6 +36,7 @@ client.on('ready', async () => {
                 .catch((e) => console.log(e));
         }, 5 * 60 * 1000);
     }
+    require('./webhooks/donate');
 });
 
 client.on('message', async (msg) => {
