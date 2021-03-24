@@ -52,6 +52,21 @@ module.exports = {
             );
         });
     },
+    async getRandomForSetAndRarity(set, rarity) {
+        return new Promise((resolve) => {
+            let extension;
+            if (rarity === 'rare') extension = `LOWER(rarity) LIKE '%rare%'`;
+            else extension = `LOWER(rarity) = '${rarity}'`;
+            db.query(
+                `SELECT * FROM ${this.table} WHERE \`set\` = ? AND ${extension} ORDER BY RAND() LIMIT 1`,
+                [set],
+                (err, rows) => {
+                    if (err) console.log(err);
+                    else resolve(rows[0]);
+                }
+            );
+        });
+    },
 
     async getTotalRecords() {
         return new Promise((resolve) => {
