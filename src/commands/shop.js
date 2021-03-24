@@ -13,7 +13,7 @@ module.exports = {
             description:
                 `Expand your collection by buying booster packs! Each time a card drops` +
                 ` you get a random amount of coins. You can use these coins to buy booster packs. ` +
-                `Each booster gives 5 new cards, and costs 250 coins.`,
+                `Each booster gives 10 new cards, and costs 250 coins.`,
             fields: [
                 {
                     name: '\u200b',
