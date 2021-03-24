@@ -2,6 +2,8 @@ const cooldownsModel = require('../models/cooldowns');
 const valuesHelper = require('../helpers/values');
 const cardsPokemonModel = require('../models/cardsPokemon');
 const userCardsPokemonModel = require('../models/usersCardsPokemon');
+const usersModel = require('../models/users');
+const random = require('../helpers/random');
 
 module.exports = {
     async run(msg, args, data) {
@@ -21,7 +23,8 @@ module.exports = {
             );
         } else {
             await cooldownsModel.setDaily(msg.author.id);
-
+            const coins = random.number(250, 500);
+            await usersModel.addCoins(msg.author.id, coins);
             const cardBonus = 10;
             const fields = [];
             for (let i = 0, iEnd = cardBonus; i < iEnd; i++) {
@@ -38,6 +41,9 @@ module.exports = {
             const embed = {
                 title: `${msg.author.username}'s daily bonus`,
                 fields,
+                footer: {
+                    text: `You got ${coins} coins!`,
+                },
             };
             return msg.channel.send({ embed });
         }
