@@ -61,12 +61,15 @@ module.exports = {
                     input,
                     'common'
                 );
-            await usersCardsPokemonModel.add(msg.author.id, card.id, 1);
-            fields.push({
-                name: card.name,
-                value: `ID: ${card.id}\nSet: ${card.set}\nRarity: ${card.rarity}`,
-                inline: true,
-            });
+            if (!card) card = await cardsPokemonModel.getRandomForSet(input);
+            if(card) {
+                await usersCardsPokemonModel.add(msg.author.id, card.id, 1);
+                fields.push({
+                    name: card.name,
+                    value: `ID: ${card.id}\nSet: ${card.set}\nRarity: ${card.rarity}`,
+                    inline: true,
+                });
+            }
         }
 
         const embed = {
