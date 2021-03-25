@@ -32,7 +32,7 @@ module.exports = {
         for(let i in cards) {
             description += `#${cards[i].id} - ${cards[i].name} (${cards[i].set}) (${cards[i].amount}x)\n`;
         }
-        maxPage = Math.ceil(cards.length / limit);
+        if(duplicates) maxPage = Math.ceil(cards.length / limit);
         if(!description) description = duplicates ? 'You don\'t have any duplicates..' : 'You have not collected any cards yet..';
 
 
