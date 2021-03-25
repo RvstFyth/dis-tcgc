@@ -148,6 +148,24 @@ module.exports = {
         });
     },
 
+    async getRecordsCountForUserAndSet(userID, set) {
+        return new Promise((resolve) => {
+            db.query(
+                `SELECT COUNT(*) AS total FROM ${this.table} WHERE user_id = ? AND \`set\` = ?`,
+                [userID, set],
+                (err, rows) => {
+                    if (err) console.log(err);
+                    else
+                        resolve(
+                            rows[0] && rows[0].total
+                                ? parseInt(rows[0].total)
+                                : 0
+                        );
+                }
+            );
+        });
+    },
+
     async getTotalCollected() {
         return new Promise((resolve) => {
             db.query(

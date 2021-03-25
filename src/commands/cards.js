@@ -15,10 +15,10 @@ module.exports = {
             // Check if argument is a valid set name, if so, we can filter on it :)
         }
 
-        const totalUserCards = await usersCardsPokemonModel.getRecordsCountForUser(msg.author.id);
         const totalCards = await cardsPokemonModel.getTotalRecords();
+        const totalUserCards = await usersCardsPokemonModel.getRecordsCountForUser(msg.author.id);
         const limit = 15;
-        const maxPage = Math.ceil(totalUserCards / limit);
+        let maxPage = Math.ceil(totalUserCards / limit);
         if (page > maxPage) page = maxPage;
         let offset = page * limit - limit;
 
@@ -32,9 +32,13 @@ module.exports = {
         for(let i in cards) {
             description += `#${cards[i].id} - ${cards[i].name} (${cards[i].set}) (${cards[i].amount}x)\n`;
         }
-
+        maxPage = Math.ceil(cards.length / limit);
         if(!description) description = duplicates ? 'You don\'t have any duplicates..' : 'You have not collected any cards yet..';
 
+
+        let footerText;
+        if (duplicates) footerText = `Page ${page}/${maxPage} | You have ${cards.length} duplicate cards.`;
+        else footerText = `Page ${page}/${maxPage} | You collected ${totalUserCards}/${totalCards}`;
         const embed = {
             title: `${msg.author.username}'s collection`,
             description,
@@ -43,7 +47,7 @@ module.exports = {
                 value: `\`${data.prefix}cards [pageNo]\` to switch page\n\`${data.prefix}cards [setName]\` to query cards of a specific set`,
             }],
             footer: {
-                text: `Page ${page}/${maxPage} | You collected ${totalUserCards}/${totalCards}`
+                text: footerText
             }
         };
 
