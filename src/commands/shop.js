@@ -5,9 +5,10 @@ const usersModel = require('../models/users');
 const boosterPrice = 250;
 
 module.exports = {
+    aliasses: ['buy'],
     async run(msg, args, data) {
-        if (args[0] && args[0] === 'buy')
-            return this.buy(msg, args.splice(1), data);
+        if (data.command === 'buy' || (args[0] && args[0] === 'buy'))
+            return this.buy(msg, args.filter(a => a != 'buy'), data);
         const embed = {
             title: `Boosters shop`,
             description:
