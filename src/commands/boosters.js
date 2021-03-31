@@ -3,9 +3,10 @@ const usersCardsPokemonModel = require('../models/usersCardsPokemon');
 const cardsPokemonModel = require('../models/cardsPokemon');
 
 module.exports = {
+    aliasses: ['open'],
     async run(msg, args, data) {
-        if (args[0] && args[1] && args[0] === 'open')
-            return this.open(msg, args.splice(1), data);
+        if (data.command === 'open' || (args[0] && args[1] && args[0] === 'open'))
+            return this.open(msg, args.filter(a => a != 'open'), data);
         const boosters = await usersBoostersPokemonModel.getAllForUserGrouped(
             msg.author.id
         );
@@ -32,6 +33,7 @@ module.exports = {
     },
 
     async open(msg, args, data) {
+        args = args.filter(a => a !== 'open');
         const input = args.join(' ');
         const amountInPack = 10;
         const record = await usersBoostersPokemonModel.getSingleForUser(
