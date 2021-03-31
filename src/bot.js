@@ -94,7 +94,7 @@ client.on('message', async (msg) => {
     } else if (msg.guild) {
         const num = random.number(1, 100);
         const num2 = random.number(1, 100);
-        if (1 ===1 || random.number(1, 100) === num || random.number(1, 100) === num2) {
+        if (random.number(1, 100) === num || random.number(1, 100) === num2) {
             // Check is user is registered
             const user = await usersModel.getForDiscordID(msg.author.id);
             if (user) {
