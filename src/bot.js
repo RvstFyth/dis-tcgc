@@ -82,6 +82,7 @@ client.on('message', async (msg) => {
             const data = {
                 prefix,
                 user,
+                command
             };
 
             if (msg.mentions.has(client.user))
