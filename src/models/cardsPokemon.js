@@ -40,6 +40,21 @@ module.exports = {
         });
     },
 
+    async getRandomForRarity(rarity) {
+        return new Promise((resolve) => {
+            let extension;
+            if (rarity === 'rare') extension = `LOWER(rarity) LIKE '%rare%'`;
+            else extension = `LOWER(rarity) = '${rarity}'`;
+            db.query(
+                `SELECT * FROM ${this.table} WHERE ${extension} ORDER BY RAND() LIMIT 1`,
+                (err, rows) => {
+                    if (err) console.log(err);
+                    else resolve(rows[0]);
+                }
+            );
+        });
+    },
+
     async getRandomForSet(set) {
         return new Promise((resolve) => {
             db.query(

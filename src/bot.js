@@ -94,11 +94,18 @@ client.on('message', async (msg) => {
     } else if (msg.guild) {
         const num = random.number(1, 100);
         const num2 = random.number(1, 100);
-        if (random.number(1, 100) === num || random.number(1, 100) === num2) {
+        if (1 ===1 || random.number(1, 100) === num || random.number(1, 100) === num2) {
             // Check is user is registered
             const user = await usersModel.getForDiscordID(msg.author.id);
             if (user) {
-                const card = await cardsPokemonModel.getRandom();
+                const rarityNum = random.number(1, 100);
+                let rarity;
+                if(rarityNum < 2) rarity = 'rare';
+                else if(rarityNum < 20) rarity = 'uncommon';
+                else rarity = 'common';
+
+                const card = await cardsPokemonModel.getRandomForRarity(rarity);
+
                 const imagePathSplitted = card.image_large.split('/');
                 await userCardsPokemonModel.add(msg.author.id, card.id, 1);
                 const coins = random.number(5, 15);
@@ -106,7 +113,8 @@ client.on('message', async (msg) => {
                 let description =
                     `Name: ${card.name}\n` +
                     `Set: ${card.set}\n` +
-                    `ID: ${card.id}`;
+                    `ID: ${card.id}\n` + 
+                    `Rarity: ${card.rarity}`;
 
                 const embed = {
                     title: `You got a new card!`,
