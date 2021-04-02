@@ -1,4 +1,5 @@
 const cardsPokemonModel = require('../models/cardsPokemon');
+const setsPokemonModel = require('../models/setsPokemon');
 
 const emojis = {
     next: '▶️'
@@ -25,10 +26,12 @@ module.exports = {
 
         if(!cards || !cards.length) return msg.channel.send(`**${msg.author.username}** no cards found..`);
 
-        return this.postEmbed(msg, cards);
+        const pSet = await setsPokemonModel.getForName(input);
+
+        return this.postEmbed(msg, cards, pSet);
     },
 
-    async postEmbed(msg, data, page = 1, originalEmbed = null)
+    async postEmbed(msg, data, pSet, page = 1, originalEmbed = null)
     {
         const limit = 10;
         const maxPage = Math.ceil(data.length / limit);
@@ -47,6 +50,12 @@ module.exports = {
         const embed = {
             title: `${cards[0].set}`,
             description,
+            thumbnail: {
+                url: pSet.symbol
+            },
+            image: {
+                url: pSet.logo
+            },
             footer: {
                 text: `Page: ${page}/${maxPage} | ${data.length} total in this set`
             }
@@ -59,7 +68,7 @@ module.exports = {
                     message.awaitReactions(filter, {time: 60000, max: 1}).then(collected => {
                         const reaction = collected.first();
                         if (reaction) {
-                            return this.postEmbed(msg, data, page + 1, message);
+                            return this.postEmbed(msg, data, pSet, page + 1, message);
                         }
                     });
                 }
@@ -73,7 +82,7 @@ module.exports = {
                     message.awaitReactions(filter, {time: 60000, max: 1}).then(collected => {
                         const reaction = collected.first();
                         if (reaction) {
-                            return this.postEmbed(msg, data, page + 1, message);
+                            return this.postEmbed(msg, data, pSet, page + 1, message);
                         }
                     });
                 }
