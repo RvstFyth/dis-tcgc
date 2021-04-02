@@ -47,9 +47,11 @@ module.exports = {
         });
     },
 
-    async setDaily(userID) {
+    async setDaily(userID, reset=false) {
         return new Promise((resolve) => {
-            const ts = parseInt(valuesHelper.currentTimestamp()) + 86400;
+            let ts;
+            if (reset) ts = 0;
+            else ts = parseInt(valuesHelper.currentTimestamp()) + 86400;
             db.query(
                 `UPDATE ${this.table} SET daily = ? WHERE user_id = ?`,
                 [ts, userID],
