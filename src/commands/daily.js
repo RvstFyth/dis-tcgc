@@ -12,15 +12,15 @@ module.exports = {
 
         if (ts < cooldowns.daily) {
             const diff = ts - parseInt(cooldowns.daily);
-            return msg.channel.send(
-                `**${
+            let description = `**${
                     msg.author.username
                 }** you have to wait ${valuesHelper.formattedDifferenceBetweenTimestamp(
                     ts,
                     diff,
                     true
-                )} for next daily bonus..`
-            );
+                )} for next daily bonus..\n\n **You can reset your daily (and claim it again) by** [voting for this bot on top.gg](https://top.gg/bot/821802913533657138/vote)`;
+            const embed = { description };
+            return msg.channel.send({embed});
         } else {
             await cooldownsModel.setDaily(msg.author.id);
             const coins = random.number(250, 500);
@@ -47,7 +47,7 @@ module.exports = {
                 title: `${msg.author.username}'s daily bonus`,
                 fields,
                 footer: {
-                    text: `You got ${coins} coins!`,
+                    text: `You got ${coins} coins! | You can reset your daily by voting for us on top.gg! `,
                 },
             };
             return msg.channel.send({ embed });
