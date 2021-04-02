@@ -25,7 +25,12 @@ client.on('ready', async () => {
     // TopGG bot listing API
     if (config.live && config.topgg_token) {
         const DBL = require('dblapi.js');
-        const dbl = new DBL(config.topgg_token, client);
+        const dbl = new DBL(config.topgg_token, 
+            {
+                webhookPort: 5020,
+                webhookAuth: 'cookiesisdabestbotdevever',
+            },
+            client);
         dbl.on('posted', () => {
             console.log('Server count posted!');
         });
@@ -35,6 +40,17 @@ client.on('ready', async () => {
                 .then(() => console.log(`Posted stats to top.gg`))
                 .catch((e) => console.log(e));
         }, 5 * 60 * 1000);
+
+        const voteModule = require('./webhooks/vote');
+        dbl.webhook.on('ready', (hook) => {
+            console.log(
+                `Webhook running at http://${hook.hostname}:${hook.port}${hook.path}`
+            );
+        });
+        dbl.webhook.on('vote', (vote) => {
+            console.log(`User with ID ${vote.user} just voted!`);
+            voteModule.run(client, vote.user, vote.isWeekend);
+        });
     }
     require('./webhooks/donate');
 });
