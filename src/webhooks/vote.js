@@ -4,13 +4,11 @@ module.exports = {
     async run(bot, userID, weekend) {
         const user = await usersModel.getForDiscordID(userID);
         if (user) {
-            const char = await characterHelper.composeFromUserRecord(user);
-            if (char) {
-                if (discUser) {
-                    await discUser.send(
-                        `Thank you for for your support!\nYour daily is reset, you can claim it again with \`,daily\``
-                    );
-                }
+            const discUser = await bot.users.fetch(userID);
+            if (discUser) {
+                await discUser.send(
+                    `Thank you for voting for your support! You daily is \`,daily\` is reset, go claim it again!`
+                );
             }
         }
     },
