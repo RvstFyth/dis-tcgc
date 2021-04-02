@@ -96,6 +96,22 @@ module.exports = {
         });
     },
 
+    async getTotalDuplicatesForUser(userID) {
+        return new Promise(resolve => {
+            db.query(`
+                        SELECT COUNT(*) AS total FROM ${this.table} AS uc
+                        INNER JOIN cards_pokemon AS cp ON uc.card_id = cp.id 
+                        WHERE user_id = ? AND uc.amount > 0
+            `,
+            [userID],
+                (err, rows) => {
+                    if(err) console.log(err);
+                    else resolve(rows[0] && rows[0].total ? parseInt(rows[0].total) : 0);
+                }    
+            );
+        });
+    },
+
     async getDuplicatesForUserPaginated(userID, offset, limit) {
         return new Promise((resolve) => {
             db.query(
