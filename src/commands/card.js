@@ -16,7 +16,7 @@ module.exports = {
             );
         const imagePathSplitted = card.image_large.split('/');
 
-        let description = `` + `Set: ${card.set}\n` + `ID: ${card.id}`;
+        let description = `` + `Set: ${card.set}\n` + `ID: ${card.id}\nRarity: ${card.rarity}`;
         const userCards = await usersCardsPokemonModel.getForUser(msg.author.id, card.id);
         const embed = {
             title: card.name,
