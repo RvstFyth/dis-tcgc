@@ -28,10 +28,15 @@ module.exports = {
             const cardBonus = 10;
             const fields = [];
             for (let i = 0, iEnd = cardBonus; i < iEnd; i++) {
-                const card = await cardsPokemonModel.getRandom();
+                const rarityRoll = random.number(1, 100);
+                let rarity;
+                if(i === 0 || rarityRoll <= 1) rarity = 'rare'; 
+                else if (rarityRoll <= 20) rarity = 'uncommon';
+                else rarity = 'common';
+                const card = await cardsPokemonModel.getRandomForRarity(rarity);
                 fields.push({
                     name: card.name,
-                    value: `ID: ${card.id}\nSet: ${card.set}`,
+                    value: `ID: ${card.id}\nSet: ${card.set}\nRarity: ${card.rarity}`,
                     inline: true,
                 });
 
