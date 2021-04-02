@@ -34,12 +34,11 @@ module.exports = {
         for(let i in cards) {
             description += `#${cards[i].id} - ${cards[i].name} (${cards[i].set}) (${cards[i].amount}x)\n`;
         }
-        if(duplicates) maxPage = Math.ceil(cards.length / limit);
         if(!description) description = duplicates ? 'You don\'t have any duplicates..' : 'You have not collected any cards yet..';
 
 
         let footerText;
-        if (duplicates) footerText = `Page ${page}/${maxPage} | You have ${cards.length} duplicate cards.`;
+        if (duplicates) footerText = `Page ${page}/${maxPage} | You have ${totalUserCards} duplicate cards.`;
         else footerText = `Page ${page}/${maxPage} | You collected ${totalUserCards}/${totalCards}`;
         const embed = {
             title: `${msg.author.username}'s collection`,

@@ -101,7 +101,7 @@ module.exports = {
             db.query(`
                         SELECT COUNT(*) AS total FROM ${this.table} AS uc
                         INNER JOIN cards_pokemon AS cp ON uc.card_id = cp.id 
-                        WHERE user_id = ? AND uc.amount > 0
+                        WHERE user_id = ? AND uc.amount > 1
             `,
             [userID],
                 (err, rows) => {
