@@ -47,6 +47,7 @@ module.exports = {
 
         if(!description) description = '...';
 
+        // Test
         const embed = {
             title: `${cards[0].set}`,
             description,
