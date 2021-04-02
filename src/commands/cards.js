@@ -16,7 +16,9 @@ module.exports = {
         }
 
         const totalCards = await cardsPokemonModel.getTotalRecords();
-        const totalUserCards = await usersCardsPokemonModel.getRecordsCountForUser(msg.author.id);
+        let totalUserCards;
+        if(duplicates) totalUserCards = await usersCardsPokemonModel.getTotalDuplicatesForUser(msg.author.id);
+        else totalUserCards = await usersCardsPokemonModel.getRecordsCountForUser(msg.author.id);
         const limit = 15;
         let maxPage = Math.ceil(totalUserCards / limit);
         if (page > maxPage) page = maxPage;
