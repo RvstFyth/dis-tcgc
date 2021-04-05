@@ -3,8 +3,8 @@ const userCardsPokemonModel = require('../models/usersCardsPokemon');
 
 module.exports = {
     async run(msg, args, data) {
-        if (!msg.guild)
-            return msg.channel.send(`This command can't run in DM..`);
+        //if (!msg.guild)
+            //return msg.channel.send(`This command can't run in DM..`);
 
         const totalUsers = await usersModel.getTotalRecords();
         const totalCollected = await userCardsPokemonModel.getTotalCollected();
@@ -13,7 +13,7 @@ module.exports = {
             title: `Info`,
             description:
                 `` +
-                `Servers: ${msg.guild.me.client.guilds.cache.size}\n` +
+                `Servers: ${msg.client.guilds.cache.size}\n` +
                 `Users: ${totalUsers}\n` +
                 `Total collected: ${totalCollected}`,
         };
