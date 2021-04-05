@@ -8,7 +8,7 @@ module.exports = {
         const uncommon = await userCardsPokemonModel.getTotalForUserAndRarity(msg.author.id, 'uncommon');
         const rare = await userCardsPokemonModel.getTotalForUserAndRarity(msg.author.id, 'rare');
         const promo = await userCardsPokemonModel.getTotalForUserAndRarity(msg.author.id, 'promo');
-        const legends = await userCardsPokemonModel.getTotalForUserAndRarity(msg.author.id, 'legends');
+        const legends = await userCardsPokemonModel.getTotalForUserAndRarity(msg.author.id, 'legend');
         const unknown = await userCardsPokemonModel.getTotalForUserAndRarity(msg.author.id, '');
         const total = await userCardsPokemonModel.getTotalCollectedForUser(msg.author.id);
 
