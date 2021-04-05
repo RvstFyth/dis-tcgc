@@ -20,10 +20,10 @@ module.exports = {
                     name: '\u200b',
                     value:
                         `` +
-                        `\`,shop buy [setName]\` to buy a pack\n` +
+                        `\`,buy [setName]\` to buy a pack\n` +
                         `\`,sets\` to see a list of available sets\n` +
                         `\`,boosters\` to see your booster packs\n` +
-                        `\`,boosters open [setName]\` to open a booster pack`,
+                        `\`,open [setName]\` to open a booster pack`,
                 },
             ],
             footer: {

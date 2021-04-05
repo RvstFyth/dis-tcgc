@@ -24,7 +24,7 @@ module.exports = {
             fields: [
                 {
                     name: '\u200b',
-                    value: `\`,boosters open [set]\` to open a booster pack`,
+                    value: `\`,open [set]\` to open a booster pack`,
                 },
             ],
         };
