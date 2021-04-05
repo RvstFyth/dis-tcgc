@@ -222,6 +222,24 @@ module.exports = {
             );
         });
     },
+    
+    async getTotalCollectedForUser(userID) {
+        return new Promise((resolve) => {
+            db.query(
+                `SELECT SUM(amount) AS total FROM ${this.table} WHERE user_id = ?`,
+                [userID],
+                (err, rows) => {
+                    if (err) console.log(err);
+                    else
+                        resolve(
+                            rows[0] && rows[0].total
+                                ? parseInt(rows[0].total)
+                                : 0
+                        );
+                }
+            );
+        });
+    },
 
     async getTotalCollected() {
         return new Promise((resolve) => {
