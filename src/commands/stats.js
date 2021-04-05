@@ -13,7 +13,7 @@ module.exports = {
         const total = await userCardsPokemonModel.getTotalCollectedForUser(msg.author.id);
 
         const fields = [];
-        const uniqueField = { name: 'Cards', value: `Common: ${common}\nUncommon: ${uncommon}\nRare: ${rare}\nPromo: ${promo}\nLegends: ${legends}\nX: ${unknown}\nTotal unique: ${common + uncommon + rare + promo + legends}\nTotal: ${total}`, inline: true };
+        const uniqueField = { name: 'Cards', value: `Common: ${common}\nUncommon: ${uncommon}\nRare: ${rare}\nPromo: ${promo}\nLegends: ${legends}\nX: ${unknown}\nTotal unique: ${common + uncommon + rare + promo + legends + unknown}\nTotal: ${total}`, inline: true };
         // const extraField = { name: '\u200b', value: }
 
         fields.push(uniqueField);
