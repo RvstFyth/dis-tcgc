@@ -6,6 +6,7 @@ module.exports = {
             `channel where the bot can post messages. \n\nYou can trigger commands in a DM with the bot, but no cards will drop ` +
             `from DMs. Spamming and abuse won't be tolerated and can result in being banned!` +
             `\n\n\`,start\` Creates a account and start collecting cards!\n` +
+            `\`,stats\` See stats about your collection\n` +
             `\`,cards\` See the cards you collected\n` +
             `\`,cards -d\` Shows your duplicate cards\n` +
             `\`,boosters\` To see your booster packs\n` +
