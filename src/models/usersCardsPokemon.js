@@ -77,6 +77,27 @@ module.exports = {
                 }
             );
         });
+    }, 
+
+    async getForUserAndRarity(userID, rarity) {
+        let extension;
+        if(rarity === 'rare') extension = ` AND cp.rarity LIKE '%$rare%'`;
+        else extension = ` AND cp.rarity = ${rarity}`;
+
+        return new Promise((resolve) => {
+            db.query(
+                `
+                        SELECT uc.*, cp.name, cp.id, cp.set FROM ${this.table} AS uc
+                        INNER JOIN cards_pokemon AS cp ON uc.card_id = cp.id 
+                        WHERE user_id = ? ${extension}
+                        `,
+                [userID],
+                (err, rows) => {
+                    if (err) console.log(err);
+                    else resolve(rows);
+                }
+            );
+        });
     },
 
     async getDuplicatesForUser(userID) {
@@ -102,6 +123,26 @@ module.exports = {
                         SELECT COUNT(*) AS total FROM ${this.table} AS uc
                         INNER JOIN cards_pokemon AS cp ON uc.card_id = cp.id 
                         WHERE user_id = ? AND uc.amount > 1
+            `,
+            [userID],
+                (err, rows) => {
+                    if(err) console.log(err);
+                    else resolve(rows[0] && rows[0].total ? parseInt(rows[0].total) : 0);
+                }    
+            );
+        });
+    },
+    
+    async getTotalForUserAndRarity(userID, rarity) {
+        let extension;
+        if(rarity === 'rare') extension = ` AND cp.rarity LIKE '%rare%'`;
+        else extension = ` AND cp.rarity = '${rarity}'`;
+
+        return new Promise(resolve => {
+            db.query(`
+                        SELECT COUNT(*) AS total FROM ${this.table} AS uc
+                        INNER JOIN cards_pokemon AS cp ON uc.card_id = cp.id 
+                        WHERE user_id = ? ${extension}
             `,
             [userID],
                 (err, rows) => {
