@@ -3,7 +3,7 @@ module.exports = {
         const embed = {
             description:
                 `You can support the development of this bot with [Donatebot.io](https://donatebot.io/checkout/823144389714378752) which uses paypal or creditcard. \n` +
-                `Besides getting a fancy role on our support server, you will also get 150 coins for each USD donated\n` +
+                `Besides getting a fancy role on our support server, you will also get 250 coins for each USD donated\n` +
                 `You can use coins for buying booster packs in the \`,shop\`.\n\n` +
                 `**Donate with crypto**:\n` +
                 `After sending a transaction, ask a staff member on our support server to verify and grant rewards. If you want to donate with another coin, contact a developer on our support server.\n\n` +
