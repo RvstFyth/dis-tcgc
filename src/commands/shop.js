@@ -8,7 +8,11 @@ module.exports = {
     aliasses: ['buy'],
     async run(msg, args, data) {
         if (data.command === 'buy' || (args[0] && args[0] === 'buy'))
-            return this.buy(msg, args.filter(a => a != 'buy'), data);
+            return this.buy(
+                msg,
+                args.filter((a) => a != 'buy'),
+                data
+            );
         const embed = {
             title: `Boosters shop`,
             description:
@@ -35,9 +39,19 @@ module.exports = {
     },
 
     async buy(msg, args, data) {
-        if (data.user.coins < boosterPrice)
+        let amount = 1;
+        if (args[0] && !isNaN(args[0]) && args[0] > 0) {
+            amount = parseInt(args[0]);
+            args = args.splice(1);
+        }
+
+        if (data.user.coins < boosterPrice * amount)
             return msg.channel.send(
-                `**${msg.author.username}** you don't have enough coins (${data.user.coins}), you need ${boosterPrice} coins to buy a booster. You get coins when a card drops.`
+                `**${msg.author.username}** you don't have enough coins (${
+                    data.user.coins
+                }), you need ${
+                    boosterPrice * amount
+                } coins to buy ${amount} x booster. You get coins when a card drops or with bonus commands.`
             );
         const input = args.join(' ');
         const sets = await cardsPokemonModel.getDistinctSetNames();
@@ -47,11 +61,13 @@ module.exports = {
             );
         await usersModel.setCoins(
             msg.author.id,
-            parseInt(data.user.coins) - boosterPrice
+            parseInt(data.user.coins) - boosterPrice * amount
         );
-        await usersBoostersPokemonModel.create(msg.author.id, input);
+        for (let i = 0; i < amount; i++) {
+            await usersBoostersPokemonModel.create(msg.author.id, input);
+        }
         return msg.channel.send(
-            `**${msg.author.username}** bought a ${input} booster!`
+            `**${msg.author.username}** bought ${amount} x ${input} booster!`
         );
     },
 };
