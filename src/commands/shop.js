@@ -25,6 +25,7 @@ module.exports = {
                     value:
                         `` +
                         `\`,buy [setName]\` to buy a pack\n` +
+                        `\`,buy 3 [setName]\` to buy 3 packs\n` +
                         `\`,sets\` to see a list of available sets\n` +
                         `\`,boosters\` to see your booster packs\n` +
                         `\`,open [setName]\` to open a booster pack`,
