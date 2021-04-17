@@ -8,7 +8,6 @@ module.exports = {
             `\n\n\`,start\` Creates a account and start collecting cards!\n` +
             `\`,stats\` See stats about your collection\n` +
             `\`,cards\` See the cards you collected\n` +
-            `\`,cards -d\` Shows your duplicate cards\n` +
             `\`,boosters\` To see your booster packs\n` +
             `\`,shop\` To open the shop interface\n` +
             `\`,card [id]\` Query card data\n` +
@@ -17,6 +16,7 @@ module.exports = {
             `\`,set [name]\` Shows all cards in a set and how many you own\n` +
             `\`,set [name] -m\` Shows all cards you are missing from a set\n` +
             `\`,set [name] -o\` Shows all cards you own from a set\n` +
+            `\`,set [name] -d\` Shows all duplicate cards you own from a set\n` +
             `\`,search [argument]\` Search cards on name\n` +
             `\`,search [argument] 2\` Go to second page of search result\n\n` +
             `\`,hourly\` Claim hourly bonus\n` +
