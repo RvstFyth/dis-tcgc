@@ -12,6 +12,7 @@ module.exports = {
             `\`,boosters\` To see your booster packs\n` +
             `\`,shop\` To open the shop interface\n` +
             `\`,card [id]\` Query card data\n` +
+            `\`,sell\` Sell your duplicate cards` +
             `\`,sets\` Shows all sets that are in the game\n` +
             `\`,set [name]\` Shows all cards in a set and how many you own\n` +
             `\`,set [name] -m\` Shows all cards you are missing from a set\n` +
