@@ -41,7 +41,7 @@ module.exports = {
             );
             if (!cards || !cards.length)
                 return msg.channel.send(
-                    `**${msg.author.username}** no duplicate cards found to sell..`
+                    `**${msg.author.username}** no cards found to sell..`
                 );
 
             let totalCards = 0,
