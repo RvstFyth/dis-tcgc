@@ -6,11 +6,11 @@ module.exports = {
         const reminders = await reminderModel.getReminders();
         if (reminders && reminders.length) {
             for (let i in reminders) {
-                const user = client.users.fetch(reminders[i].discord_id);
+                const user = await client.users.fetch(reminders[i].discord_id);
                 if (user) {
                     try {
                         const u = new Discord.User(client, user);
-                        await u.send(reminders[i].message);
+                        await user.send(reminders[i].message);
                         await reminderModel.delete(reminders[i].id);
                     } catch (e) {
                         console.log(
