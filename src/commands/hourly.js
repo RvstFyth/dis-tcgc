@@ -4,12 +4,15 @@ const cardsPokemonModel = require('../models/cardsPokemon');
 const userCardsPokemonModel = require('../models/usersCardsPokemon');
 const usersModel = require('../models/users');
 const random = require('../helpers/random');
+const remindersModel = require('../models/reminders');
+const reminderEmoji = '⏰';
+
 module.exports = {
     async run(msg, args, data) {
         const cooldowns = await cooldownsModel.getFor(msg.author.id);
         const ts = valuesHelper.currentTimestamp();
 
-        if (ts < cooldowns.hourly) {
+        if (1 === 2 && ts < cooldowns.hourly) {
             const diff = ts - parseInt(cooldowns.hourly);
             return msg.channel.send(
                 `**${
@@ -29,7 +32,7 @@ module.exports = {
             for (let i = 0, iEnd = cardBonus; i < iEnd; i++) {
                 const rarityRoll = random.number(1, 100);
                 let rarity;
-                if(rarityRoll <= 1) rarity = 'rare'; 
+                if (rarityRoll <= 1) rarity = 'rare';
                 else if (rarityRoll <= 20) rarity = 'uncommon';
                 else rarity = 'common';
                 const card = await cardsPokemonModel.getRandomForRarity(rarity);
@@ -50,7 +53,28 @@ module.exports = {
                     text: `You got ${coins} coins!`,
                 },
             };
-            return msg.channel.send({ embed });
+            return msg.channel
+                .send({ embed })
+                .then(async (message) => {
+                    await message.react(reminderEmoji);
+                    const filter = (reaction, user) =>
+                        reaction.emoji.name === reminderEmoji &&
+                        user.id === msg.author.id;
+                    message
+                        .awaitReactions(filter, { time: 60000, max: 1 })
+                        .then(async (collected) => {
+                            const reaction = collected.first();
+                            if (reaction) {
+                                await remindersModel.create(
+                                    msg.author.id,
+                                    'You can claim your hourly bonus again!',
+                                    valuesHelper.currentTimestamp() + 3600
+                                );
+                            }
+                        })
+                        .catch((e) => console.log(e));
+                })
+                .catch((e) => console.log(e));
         }
     },
 };
