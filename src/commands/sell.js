@@ -28,17 +28,24 @@ module.exports = {
         args = args.splice(1);
         if (!args.length) return this.help(msg, args);
 
-        let rarity, set;
+        let cards;
         const rarities = ['common', 'uncommon', 'rare'];
-        if (rarities.indexOf(args[0]) > -1 && args[1]) {
+        if (rarities.indexOf(args[0]) > -1) {
             const rarity = args[0];
             args = args.splice(1);
             const setName = args.join(' ');
-            const cards = await userCardsModel.getDuplicatesForUserAndSetAndRarity(
-                msg.author.id,
-                setName,
-                rarity
-            );
+            if (!setName) {
+                cards = await userCardsModel.getDuplicatesForUserAndRarity(
+                    msg.author.id,
+                    rarity
+                );
+            } else {
+                cards = await userCardsModel.getDuplicatesForUserAndSetAndRarity(
+                    msg.author.id,
+                    setName,
+                    rarity
+                );
+            }
             if (!cards || !cards.length)
                 return msg.channel.send(
                     `**${msg.author.username}** no cards found to sell..`

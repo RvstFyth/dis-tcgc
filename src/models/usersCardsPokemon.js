@@ -182,6 +182,27 @@ module.exports = {
         });
     },
 
+    async getDuplicatesForUserAndRarity(userID, rarity) {
+        let extension;
+        if (rarity === 'rare') extension = ` AND cp.rarity LIKE '%rare%'`;
+        else extension = ` AND cp.rarity = '${rarity}'`;
+
+        return new Promise((resolve) => {
+            db.query(
+                `
+                    SELECT uc.*, cp.name, cp.id, cp.set, cp.rarity FROM ${this.table} AS uc
+                    INNER JOIN cards_pokemon AS cp ON uc.card_id = cp.id 
+                    WHERE user_id = ? AND uc.amount > 1 ${extension}
+                `,
+                [userID],
+                (err, rows) => {
+                    if (err) console.log(err);
+                    else resolve(rows);
+                }
+            );
+        });
+    },
+
     async getDuplicatesForUserAndSetAndRarity(userID, set, rarity) {
         let extension;
         if (rarity === 'rare') extension = ` AND cp.rarity LIKE '%rare%'`;
