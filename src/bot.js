@@ -25,12 +25,14 @@ client.on('ready', async () => {
     // TopGG bot listing API
     if (config.live && config.topgg_token) {
         const DBL = require('dblapi.js');
-        const dbl = new DBL(config.topgg_token, 
+        const dbl = new DBL(
+            config.topgg_token,
             {
                 webhookPort: 5020,
                 webhookAuth: 'cookiesisdabestbotdevever',
             },
-            client);
+            client
+        );
         dbl.on('posted', () => {
             console.log('Server count posted!');
         });
@@ -52,6 +54,11 @@ client.on('ready', async () => {
             voteModule.run(client, vote.user, vote.isWeekend);
         });
     }
+    // Reminders
+    require('./helpers/reminders').process(client);
+    setInterval(() => {
+        require('./helpers/reminders').process(client);
+    }, 60 * 1000);
     require('./webhooks/donate');
 });
 
@@ -98,7 +105,7 @@ client.on('message', async (msg) => {
             const data = {
                 prefix,
                 user,
-                command
+                command,
             };
 
             if (msg.mentions.has(client.user))
@@ -117,8 +124,8 @@ client.on('message', async (msg) => {
             if (user) {
                 const rarityNum = random.number(1, 100);
                 let rarity;
-                if(rarityNum < 2) rarity = 'rare';
-                else if(rarityNum < 20) rarity = 'uncommon';
+                if (rarityNum < 2) rarity = 'rare';
+                else if (rarityNum < 20) rarity = 'uncommon';
                 else rarity = 'common';
 
                 const card = await cardsPokemonModel.getRandomForRarity(rarity);
@@ -130,7 +137,7 @@ client.on('message', async (msg) => {
                 let description =
                     `Name: ${card.name}\n` +
                     `Set: ${card.set}\n` +
-                    `ID: ${card.id}\n` + 
+                    `ID: ${card.id}\n` +
                     `Rarity: ${card.rarity}`;
 
                 const embed = {
