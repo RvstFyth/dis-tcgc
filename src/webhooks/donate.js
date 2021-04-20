@@ -16,7 +16,7 @@ app.post('/webhooks', async function (request, response) {
         );
         if (webhook.status.toLowerCase() === 'completed') {
             const discordID = webhook.raw_buyer_id;
-            const coins = parseInt(webhook.price) * 150;
+            const coins = parseInt(webhook.price) * 250;
             let user = await usersModel.getForDiscordID(discordID);
             if (!user) user = '377092395931795458';
             if (user) {
