@@ -28,6 +28,24 @@ module.exports = {
         });
     },
 
+    async getCountForUser(userID, booster) {
+        return new Promise((resolve) => {
+            db.query(
+                `SELECT count(*) AS total FROM ${this.table} WHERE user_id = ? AND booster = ? LIMIT 1`,
+                [userID, booster],
+                (err, rows) => {
+                    if (err) console.log(err);
+                    else
+                        resolve(
+                            rows[0] && rows[0].total
+                                ? parseInt(rows[0].total)
+                                : 0
+                        );
+                }
+            );
+        });
+    },
+
     async getAllForUserGrouped(userID) {
         return new Promise((resolve) => {
             db.query(
@@ -42,11 +60,11 @@ module.exports = {
     },
 
     async delete(ID) {
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
             db.query(`DELETE FROM ${this.table} WHERE id = ?`, [ID], (err) => {
-                if(err) console.log(err);
+                if (err) console.log(err);
                 else resolve(true);
             });
         });
-    }
+    },
 };

@@ -2,11 +2,20 @@ const usersBoostersPokemonModel = require('../models/usersBoostersPokemon');
 const usersCardsPokemonModel = require('../models/usersCardsPokemon');
 const cardsPokemonModel = require('../models/cardsPokemon');
 
+const nextEmoji = '⏭️';
+
 module.exports = {
     aliasses: ['open'],
     async run(msg, args, data) {
-        if (data.command === 'open' || (args[0] && args[1] && args[0] === 'open'))
-            return this.open(msg, args.filter(a => a != 'open'), data);
+        if (
+            data.command === 'open' ||
+            (args[0] && args[1] && args[0] === 'open')
+        )
+            return this.open(
+                msg,
+                args.filter((a) => a != 'open'),
+                data
+            );
         const boosters = await usersBoostersPokemonModel.getAllForUserGrouped(
             msg.author.id
         );
@@ -33,7 +42,7 @@ module.exports = {
     },
 
     async open(msg, args, data) {
-        args = args.filter(a => a !== 'open');
+        args = args.filter((a) => a !== 'open');
         const input = args.join(' ');
         const amountInPack = 10;
         const record = await usersBoostersPokemonModel.getSingleForUser(
@@ -64,7 +73,7 @@ module.exports = {
                     'common'
                 );
             if (!card) card = await cardsPokemonModel.getRandomForSet(input);
-            if(card) {
+            if (card) {
                 await usersCardsPokemonModel.add(msg.author.id, card.id, 1);
                 fields.push({
                     name: card.name,
@@ -73,12 +82,37 @@ module.exports = {
                 });
             }
         }
-
+        const userBoosterCount = await usersBoostersPokemonModel.getCountForUser(
+            msg.author.id,
+            input
+        );
+        if (userBoosterCount && userBoosterCount > 0) {
+            fields.push({
+                name: '\u200b',
+                value: `React with ${nextEmoji} to open another booster from this set`,
+            });
+        }
         const embed = {
             title: `${msg.author.username}`,
             fields,
         };
 
-        return msg.channel.send({ embed });
+        return msg.channel.send({ embed }).then(async (message) => {
+            if (userBoosterCount && userBoosterCount > 0) {
+                await message.react(nextEmoji);
+                const filter = (reaction, user) =>
+                    reaction.emoji.name === nextEmoji &&
+                    user.id === msg.author.id;
+                message
+                    .awaitReactions(filter, { time: 30000, max: 1 })
+                    .then((collected) => {
+                        const reaction = collected.first();
+                        if (reaction) {
+                            return this.open(msg, args, data);
+                        }
+                    })
+                    .catch((e) => console.log(e));
+            }
+        });
     },
 };
