@@ -12,7 +12,7 @@ module.exports = {
         const cooldowns = await cooldownsModel.getFor(msg.author.id);
         const ts = valuesHelper.currentTimestamp();
 
-        if (1 === 2 && ts < cooldowns.hourly) {
+        if (ts < cooldowns.hourly) {
             const diff = ts - parseInt(cooldowns.hourly);
             return msg.channel.send(
                 `**${
