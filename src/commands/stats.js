@@ -1,4 +1,5 @@
 const userCardsPokemonModel = require('../models/usersCardsPokemon');
+const cardsPokemonModel = require('../models/cardsPokemon');
 
 module.exports = {
     async run(msg, args, data) {
@@ -30,12 +31,14 @@ module.exports = {
             msg.author.id
         );
 
+        const totalCards = await cardsPokemonModel.getTotalRecords();
+        const unique = common + uncommon + rare + promo + legends + unknown;
         const fields = [];
         const uniqueField = {
             name: 'Cards',
-            value: `Common: ${common}\nUncommon: ${uncommon}\nRare: ${rare}\nPromo: ${promo}\nLegends: ${legends}\nX: ${unknown}\nTotal unique: ${
-                common + uncommon + rare + promo + legends + unknown
-            }\nTotal: ${total}`,
+            value: `Common: ${common}\nUncommon: ${uncommon}\nRare: ${rare}\nPromo: ${promo}\nLegends: ${legends}\nX: ${unknown}\nTotal unique: ${unique} (${Math.round(
+                (unique / totalCards) * 100
+            )}%)\nTotal: ${total}`,
             inline: true,
         };
 
