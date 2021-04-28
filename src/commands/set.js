@@ -3,6 +3,7 @@ const setsPokemonModel = require('../models/setsPokemon');
 
 const emojis = {
     next: '▶️',
+    previous: '◀️',
 };
 
 module.exports = {
@@ -90,21 +91,28 @@ module.exports = {
         };
         if (originalEmbed) {
             return originalEmbed.edit({ embed }).then(async (message) => {
-                if (page < maxPage) {
+                if (maxPage > 1) {
+                    await message.react(emojis.previous);
                     await message.react(emojis.next);
                     const filter = (reaction, user) =>
-                        reaction.emoji.name === emojis.next &&
+                        ((page < maxPage &&
+                            reaction.emoji.name === emojis.next) ||
+                            (page > 1 &&
+                                reaction.emoji.name === emojis.previous)) &&
                         user.id === msg.author.id;
                     message
                         .awaitReactions(filter, { time: 60000, max: 1 })
                         .then((collected) => {
                             const reaction = collected.first();
                             if (reaction) {
+                                if (reaction.emoji.name === emojis.next)
+                                    page += 1;
+                                else page -= 1;
                                 return this.postEmbed(
                                     msg,
                                     data,
                                     pSet,
-                                    page + 1,
+                                    page,
                                     message
                                 );
                             }
@@ -113,21 +121,29 @@ module.exports = {
             });
         } else {
             return msg.channel.send({ embed }).then(async (message) => {
-                if (page < maxPage) {
+                if (maxPage > 1) {
+                    await message.react(emojis.previous);
                     await message.react(emojis.next);
                     const filter = (reaction, user) =>
-                        reaction.emoji.name === emojis.next &&
+                        ((page < maxPage &&
+                            reaction.emoji.name === emojis.next) ||
+                            (page > 1 &&
+                                reaction.emoji.name === emojis.previous)) &&
                         user.id === msg.author.id;
                     message
                         .awaitReactions(filter, { time: 60000, max: 1 })
                         .then((collected) => {
                             const reaction = collected.first();
                             if (reaction) {
+                                if (reaction.emoji.name === emojis.next)
+                                    page += 1;
+                                else page -= 1;
+
                                 return this.postEmbed(
                                     msg,
                                     data,
                                     pSet,
-                                    page + 1,
+                                    page,
                                     message
                                 );
                             }
