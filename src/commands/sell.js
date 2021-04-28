@@ -29,7 +29,7 @@ module.exports = {
         if (!args.length) return this.help(msg, args);
 
         let cards;
-        const rarities = ['common', 'uncommon', 'rare'];
+        const rarities = ['common', 'uncommon', 'rare', 'promo', 'legend'];
         if (rarities.indexOf(args[0]) > -1) {
             const rarity = args[0];
             args = args.splice(1);
