@@ -21,6 +21,7 @@ module.exports = {
             `\`,search [argument] 2\` Go to second page of search result\n\n` +
             `\`,hourly\` Claim hourly bonus\n` +
             `\`,daily\` Claim daily bonus\n` +
+            `\`,cooldowns\`|\`,cd\` Check your cooldowns \n` +
             `\`,donate\` Support the development of this bot and get rewards!`;
 
         const embed = {
