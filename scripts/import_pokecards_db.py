@@ -9,7 +9,7 @@ db = mysql.connector.connect(
     host="localhost",
     user="dev",
     password="dev",
-    database="dis-tcgc"
+    database="dis_tcgc"
 )
 cur = db.cursor()
 page = 1
@@ -24,17 +24,20 @@ while(True):
         for d in data:
             sql = """
                 INSERT INTO cards_pokemon
-                (`name`, `set`, pokedex_number, rarity, image_small, image_large)
-                VALUES (%s,%s,%s,%s,%s,%s)
+                (`external_id`, `super_type`, `sub_types`, `types`, `name`, `set`, rarity, image_small, image_large)
+                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
                 """
             if "rarity" in d:
                 rarity = d['rarity']
             else:
                 rarity = ""
             values = (
+                d['id'],
+                d['supertype'],
+                "|" . join(d['subtypes']) if "subtypes" in d else "",
+                "|" . join(d['types']) if "types" in d else "",
                 d['name'],
                 str(d['set']['name']).lower(),
-                0,
                 rarity,
                 d['images']['small'],
                 d['images']['large']
