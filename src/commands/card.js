@@ -16,8 +16,18 @@ module.exports = {
             );
         const imagePathSplitted = card.image_large.split('/');
 
-        let description = `` + `Set: ${card.set}\n` + `ID: ${card.id}\nRarity: ${card.rarity}`;
-        const userCards = await usersCardsPokemonModel.getForUser(msg.author.id, card.id);
+        let description =
+            `` +
+            `Set: ${card.set}\n` +
+            `SuperType: ${card.super_type}\n` +
+            `SubTypes: ${card.sub_types}\n` +
+            `Types: ${card.types}\n` +
+            `ID: ${card.id}\n` +
+            `Rarity: ${card.rarity}`;
+        const userCards = await usersCardsPokemonModel.getForUser(
+            msg.author.id,
+            card.id
+        );
         const embed = {
             title: card.name,
             description,
@@ -27,8 +37,8 @@ module.exports = {
                 }`,
             },
             footer: {
-                text: `You own ${userCards ? userCards.amount : 0}`
-            }
+                text: `You own ${userCards ? userCards.amount : 0}`,
+            },
         };
         await msg.channel.send({
             embed,
