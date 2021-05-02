@@ -103,7 +103,7 @@ module.exports = {
                 url: pSet.logo,
             },
             footer: {
-                text: `Page: ${page}/${maxPage} | ${data.length} total in this set`,
+                text: `Page: ${page}/${maxPage} | ${data.length} total in this set | \`,help set\``,
             },
         };
         if (originalEmbed) {
