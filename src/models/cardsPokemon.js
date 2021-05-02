@@ -125,14 +125,19 @@ module.exports = {
         });
     },
 
-    async getCardsForSetForUser(name, userID) {
+    async getCardsForSetForUser(name, userID, rarity = null) {
+        let extension = '';
+        if (rarity) {
+            if (rarity === 'rare') extension = ` AND cp.rarity LIKE '%rare%'`;
+            else extension = ` AND cp.rarity = '${rarity}'`;
+        }
         return new Promise((resolve) => {
             db.query(
                 `
                     SELECT cp.*, up.amount
                     FROM ${this.table} AS cp
                     LEFT JOIN users_cards_pokemon AS up ON up.card_id = cp.id AND up.user_id = ? 
-                    WHERE cp.set = ?`,
+                    WHERE cp.set = ? ${extension}`,
                 [userID, name],
                 (err, rows) => {
                     if (err) console.log(err);
@@ -142,31 +147,20 @@ module.exports = {
         });
     },
 
-    async getCardsForSetForUserDuplicates(name, userID) {
+    async getCardsForSetForUserDuplicates(name, userID, rarity = null) {
+        let extension = '';
+        if (rarity) {
+            if (rarity === 'rare') extension = ` AND cp.rarity LIKE '%rare%'`;
+            else extension = ` AND cp.rarity = '${rarity}'`;
+        }
+
         return new Promise((resolve) => {
             db.query(
                 `
                     SELECT cp.*, up.amount
                     FROM ${this.table} AS cp
                     LEFT JOIN users_cards_pokemon AS up ON up.card_id = cp.id AND up.user_id = ? 
-                    WHERE cp.set = ? AND up.amount > 1`,
-                [userID, name],
-                (err, rows) => {
-                    if (err) console.log(err);
-                    else resolve(rows);
-                }
-            );
-        });
-    },
-    
-    async getCardsForSetForUserOwned(name, userID) {
-        return new Promise((resolve) => {
-            db.query(
-                `
-                    SELECT cp.*, up.amount
-                    FROM ${this.table} AS cp
-                    LEFT JOIN users_cards_pokemon AS up ON up.card_id = cp.id AND up.user_id = ? 
-                    WHERE cp.set = ? AND up.amount > 0`,
+                    WHERE cp.set = ? AND up.amount > 1 ${extension}`,
                 [userID, name],
                 (err, rows) => {
                     if (err) console.log(err);
@@ -176,14 +170,44 @@ module.exports = {
         });
     },
 
-    async getCardsForSetForUserMissing(name, userID) {
+    async getCardsForSetForUserOwned(name, userID, rarity = null) {
+        return new Promise((resolve) => {
+            let extension = '';
+            if (rarity) {
+                if (rarity === 'rare')
+                    extension = ` AND cp.rarity LIKE '%rare%'`;
+                else extension = ` AND cp.rarity = '${rarity}'`;
+            }
+
+            db.query(
+                `
+                    SELECT cp.*, up.amount
+                    FROM ${this.table} AS cp
+                    LEFT JOIN users_cards_pokemon AS up ON up.card_id = cp.id AND up.user_id = ? 
+                    WHERE cp.set = ? AND up.amount > 0 ${extension}`,
+                [userID, name],
+                (err, rows) => {
+                    if (err) console.log(err);
+                    else resolve(rows);
+                }
+            );
+        });
+    },
+
+    async getCardsForSetForUserMissing(name, userID, rarity = null) {
+        let extension = '';
+        if (rarity) {
+            if (rarity === 'rare') extension = ` AND cp.rarity LIKE '%rare%'`;
+            else extension = ` AND cp.rarity = '${rarity}'`;
+        }
+
         return new Promise((resolve) => {
             db.query(
                 `
                     SELECT cp.*, up.amount
                     FROM ${this.table} AS cp
                     LEFT JOIN users_cards_pokemon AS up ON up.card_id = cp.id AND up.user_id = ? 
-                    WHERE cp.set = ? AND (up.amount IS NULL OR up.amount < 1)`,
+                    WHERE cp.set = ? AND (up.amount IS NULL OR up.amount < 1) ${extension}`,
                 [userID, name],
                 (err, rows) => {
                     if (err) console.log(err);
