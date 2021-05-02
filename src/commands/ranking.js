@@ -9,7 +9,11 @@ module.exports = {
         let coinsField = { name: 'Coins', value: '' };
         let cnt = 1;
         for (let i in topCoins) {
-            coinsField.value += `${cnt}: <@${topCoins[i].discord_id} \n`;
+            coinsField.value += `${cnt}: ${
+                topCoins[i].username
+                    ? topCoins[i].username
+                    : topCoins[i].discord_id
+            } (${topCoins[i].coins})\n`;
             cnt++;
         }
 
@@ -20,6 +24,6 @@ module.exports = {
             fields,
         };
 
-        msg.channel.send({ embed });
+        return msg.channel.send({ embed });
     },
 };
