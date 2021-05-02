@@ -17,6 +17,19 @@ module.exports = {
         const duplicates = args.filter(
             (a) => ['-duplicates', '-d'].indexOf(a) > -1
         ).length;
+        let rarityFilter;
+        const rarityArguments = args.filter((a) => a.startsWith('-r='));
+        if (rarityArguments && rarityArguments.length) {
+            const tmp = rarityArguments[0];
+            const parts = tmp.split('=');
+            if (
+                ['common', 'uncommon', 'rare', 'promo', 'legend'].indexOf(
+                    parts[1]
+                ) > -1
+            ) {
+                rarityFilter = parts[1].toLowerCase();
+            }
+        }
 
         args = args.filter((a) => !a.startsWith('-'));
 
@@ -30,22 +43,26 @@ module.exports = {
         if (owned)
             cards = await cardsPokemonModel.getCardsForSetForUserOwned(
                 input,
-                msg.author.id
+                msg.author.id,
+                rarityFilter
             );
         else if (missing)
             cards = await cardsPokemonModel.getCardsForSetForUserMissing(
                 input,
-                msg.author.id
+                msg.author.id,
+                rarityFilter
             );
         else if (duplicates)
             cards = await cardsPokemonModel.getCardsForSetForUserDuplicates(
                 input,
-                msg.author.id
+                msg.author.id,
+                rarityFilter
             );
         else
             cards = await cardsPokemonModel.getCardsForSetForUser(
                 input,
-                msg.author.id
+                msg.author.id,
+                rarityFilter
             );
 
         if (!cards || !cards.length)
