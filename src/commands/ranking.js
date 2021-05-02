@@ -2,6 +2,7 @@ const usersModel = require('../models/users');
 const userCardsModel = require('../models/usersCardsPokemon');
 
 module.exports = {
+    aliasses: ['rank', 'top'],
     async run(msg, args, data) {
         const fields = [];
         const topCoins = await usersModel.getTopCoins();
