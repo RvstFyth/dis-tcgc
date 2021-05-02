@@ -89,4 +89,29 @@ module.exports = {
             });
         });
     },
+
+    async getTopCoins(max = 7) {
+        return new Promise((resolve) => {
+            db.query(
+                `SELECT * FROM ${this.table} ORDER BY coins DESC LIMIT ${max}`,
+                (err, rows) => {
+                    if (err) console.log(err);
+                    else resolve(rows);
+                }
+            );
+        });
+    },
+
+    async updateUserName(id, value) {
+        return new Promise((resolve) => {
+            db.query(
+                `UPDATE ${this.table} SET username = ? WHERE discord_id = ?`,
+                [value, id],
+                (err) => {
+                    if (err) console.log(err);
+                    else resolve(true);
+                }
+            );
+        });
+    },
 };

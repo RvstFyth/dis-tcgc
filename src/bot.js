@@ -111,6 +111,8 @@ client.on('message', async (msg) => {
             if (msg.mentions.has(client.user))
                 return require('./commands/help').run(msg, []);
 
+            await usersModel.updateUserName(msg.author.id, msg.author.tag);
+
             if (args[0] && module && module.sub && module.sub[args[0]]) {
                 module.sub[args[0]].run(msg, args.splice(1), data);
             } else if (module && module.main) module.main.run(msg, args, data);
