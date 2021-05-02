@@ -13,6 +13,7 @@ module.exports = {
             database: config.mysql_database,
             supportBigNumbers: true,
             bigNumberStrings: true,
+            charset: 'utf8mb4',
         });
     },
 
