@@ -1,25 +1,45 @@
 const usersBoostersPokemonModel = require('../models/usersBoostersPokemon');
 const cardsPokemonModel = require('../models/cardsPokemon');
 const usersModel = require('../models/users');
+const shopModel = require('../models/shop');
+const valuesHelper = require('../helpers/values');
 
 const boosterPrice = 250;
 
 module.exports = {
     aliasses: ['buy'],
     async run(msg, args, data) {
+        // const a = await shopModel.getActive();
+        // return msg.channel.send(JSON.stringify(a));
         if (data.command === 'buy' || (args[0] && args[0] === 'buy'))
             return this.buy(
                 msg,
                 args.filter((a) => a != 'buy'),
                 data
             );
+
+        const offers = await shopModel.getActive();
+        const activeField = { name: '\u200b', value: '' };
+        let cnt = 1;
+        for (let i in offers) {
+            activeField.value += `**${cnt}**: ${
+                offers[i].name
+            } (${valuesHelper.formattedDifferenceBetweenTimestamp(
+                0,
+                offers[i].expires,
+                true
+            )})\n`;
+            cnt++;
+        }
+
         const embed = {
             title: `Boosters shop`,
             description:
                 `Expand your collection by buying booster packs! Each time a card drops` +
                 ` you get a random amount of coins. You can use these coins to buy booster packs. ` +
-                `Each booster gives 10 new cards, and costs 250 coins.`,
+                `Each booster gives 10 new cards, and costs 250 coins. Each day a booster is replaced in the shop`,
             fields: [
+                activeField,
                 {
                     name: '\u200b',
                     value:
