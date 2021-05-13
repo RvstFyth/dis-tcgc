@@ -17,6 +17,8 @@ logger.init();
 const usersModel = require('./models/users');
 const cardsPokemonModel = require('./models/cardsPokemon');
 const userCardsPokemonModel = require('./models/usersCardsPokemon');
+const shopModel = require('./models/shop');
+const setsModel = require('./models/setsPokemon');
 
 const client = new discord.Client();
 
@@ -60,6 +62,17 @@ client.on('ready', async () => {
         require('./helpers/reminders').process(client);
     }, 60 * 1000);
     require('./webhooks/donate');
+
+    setInterval(async () => {
+        const shopOffers = await shopModel.getActive();
+        if (!shopOffers || shopOffers.length < 5) {
+            const set = await setsModel.getRandom();
+            await shopModel.create(
+                set.id,
+                valuesHelper.currentTimestamp() + 86400
+            );
+        }
+    }, 60 * 1000);
 });
 
 client.on('message', async (msg) => {
