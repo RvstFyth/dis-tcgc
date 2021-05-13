@@ -33,4 +33,21 @@ module.exports = {
             );
         });
     },
+    async getActiveForSetID(setID) {
+        return new Promise((resolve) => {
+            const ts = valuesHelper.currentTimestamp();
+            db.query(
+                `
+                    SELECT s.*, sp.name, sp.series
+                    FROM ${this.table} AS s
+                    INNER JOIN sets_pokemon AS sp ON sp.id = s.set_id
+                    WHERE s.expires > ? AND s.set_id = ?`,
+                [ts, setID],
+                (err, rows) => {
+                    if (err) console.log(err);
+                    else resolve(rows[0]);
+                }
+            );
+        });
+    },
 };

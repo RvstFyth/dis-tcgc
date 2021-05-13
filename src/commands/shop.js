@@ -3,6 +3,7 @@ const cardsPokemonModel = require('../models/cardsPokemon');
 const usersModel = require('../models/users');
 const shopModel = require('../models/shop');
 const valuesHelper = require('../helpers/values');
+const setsModel = require('../models/setsPokemon');
 
 const boosterPrice = 250;
 
@@ -75,11 +76,17 @@ module.exports = {
                 } coins to buy ${amount} x booster. You get coins when a card drops or with bonus commands.`
             );
         const input = args.join(' ');
-        const sets = await cardsPokemonModel.getDistinctSetNames();
-        if (sets.indexOf(input) < 0)
+        const set = await setsModel.getForName(input);
+        if (!set)
             return msg.channel.send(
                 `**${msg.author.username}** invalid set name provided..`
             );
+        const activeOffer = await shopModel.getActiveForSetID(set.id);
+        if (!activeOffer) {
+            return msg.channel.send(
+                `**${msg.author.username}** these boosters are not for sale now. See \`,shop\` to see which boosters are for sale.`
+            );
+        }
         await usersModel.setCoins(
             msg.author.id,
             parseInt(data.user.coins) - boosterPrice * amount
