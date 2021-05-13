@@ -18,7 +18,7 @@ module.exports = {
             collectedField.value += `${cnt}: ${
                 usersCollected[i].username
                     ? usersCollected[i].username
-                    : usersCollected[i].discord_id
+                    : 'x Doe'
             } (${usersCollected[i].total})\n`;
             cnt++;
         }
@@ -27,9 +27,7 @@ module.exports = {
         cnt = 1;
         for (let i in topCoins) {
             coinsField.value += `${cnt}: ${
-                topCoins[i].username
-                    ? topCoins[i].username
-                    : topCoins[i].discord_id
+                topCoins[i].username ? topCoins[i].username : 'x Doe'
             } (${topCoins[i].coins})\n`;
             cnt++;
         }
