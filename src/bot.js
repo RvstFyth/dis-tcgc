@@ -66,11 +66,15 @@ client.on('ready', async () => {
     setInterval(async () => {
         const shopOffers = await shopModel.getActive();
         if (!shopOffers || shopOffers.length < 5) {
-            const set = await setsModel.getRandom();
-            await shopModel.create(
-                set.id,
-                valuesHelper.currentTimestamp() + 86400
-            );
+            const missing = 5 - shopOffers.length;
+            let cnt = 1;
+            for (let i = 0; i < missing; i++) {
+                const set = await setsModel.getRandom();
+                await shopModel.create(
+                    set.id,
+                    valuesHelper.currentTimestamp() + 86400 * cnt
+                );
+            }
         }
     }, 60 * 1000);
 });
