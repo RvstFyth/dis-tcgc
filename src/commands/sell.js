@@ -91,7 +91,13 @@ module.exports = {
             );
 
         const confirmed = await input.askUserToConfirm(
-            `**${msg.author.username}**, confirm to sell ${card.name} | ${card.set} | ${card.rarity}`,
+            `**${msg.author.username}**, confirm to sell ${card.name} | ${
+                card.set
+            } | ${card.rarity} ${
+                userCards.amount < 2
+                    ? ' \n\n**This is your last copy of this card!**'
+                    : ''
+            }`,
             msg
         );
         if (confirmed) {
