@@ -7,8 +7,24 @@ module.exports = {
         const fields = [];
         const topCoins = await usersModel.getTopCoins();
 
-        let coinsField = { name: 'Coins', value: '' };
+        const collectedField = {
+            name: 'Unique cards',
+            value: '',
+            inline: true,
+        };
+        const usersCollected = await userCardsModel.getTopCollectorsForRanking();
         let cnt = 1;
+        for (let i in usersCollected) {
+            collectedField.value += `${cnt}: ${
+                usersCollected[i].username
+                    ? usersCollected[i].username
+                    : usersCollected[i].discord_id
+            } (${usersCollected[i].total})\n`;
+            cnt++;
+        }
+
+        let coinsField = { name: 'Coins', value: '', inline: true };
+        cnt = 1;
         for (let i in topCoins) {
             coinsField.value += `${cnt}: ${
                 topCoins[i].username
@@ -19,6 +35,7 @@ module.exports = {
         }
 
         fields.push(coinsField);
+        fields.push(collectedField);
 
         const embed = {
             title: 'Ranking',
