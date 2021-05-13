@@ -319,6 +319,7 @@ module.exports = {
                 SELECT u.username, u.discord_id, COUNT(uc.card_id) AS total
                 FROM ${this.table} AS uc
                 INNER JOIN users AS u ON uc.user_id = u.discord_id
+                GROUP BY u.discord_id
                 ORDER BY total DESC LIMIT ?
             `,
                 [limit],
