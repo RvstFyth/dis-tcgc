@@ -74,6 +74,7 @@ client.on('ready', async () => {
                     set.id,
                     valuesHelper.currentTimestamp() + 86400 * cnt
                 );
+                cnt++;
             }
         }
     }, 60 * 1000);
