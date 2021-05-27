@@ -216,4 +216,26 @@ module.exports = {
             );
         });
     },
+
+    async getDistinctTypes() {
+        return new Promise((resolve) => {
+            db.query(
+                `SELECT DISTINCT \`types\` FROM ${this.table} WHERE \`types\` != ''`,
+                (err, rows) => {
+                    if (err) console.log(err);
+                    else {
+                        const res = [];
+                        for (let i in rows) {
+                            const parsed = rows[i].types.split('|');
+                            for (let j in parsed) {
+                                if (res.indexOf(parsed[j]) < 0)
+                                    res.push(parsed[j]);
+                            }
+                        }
+                        resolve(res);
+                    }
+                }
+            );
+        });
+    },
 };
