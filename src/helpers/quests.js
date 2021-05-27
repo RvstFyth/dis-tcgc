@@ -1,43 +1,35 @@
-const userQuestsModel = require('../models/usersQuests');
+const random = require('./random');
+const setsModel = require('../models/setsPokemon');
+const cardsModel = require('../models/cardsPokemon');
 
 module.exports = {
-    async check(command, type, amount, user, msg) {
-        const quests = await userQuestsModel.getActiveForForCommandAndType(
-            user.id,
-            command,
-            type
-        );
-        if (quests && quests.length) {
-            for (const quest of quests) {
-                // Check if quest is completed
-                if (
-                    quest.totalAmount &&
-                    parseInt(quest.amount) + parseInt(amount) >=
-                        parseInt(quest.totalAmount)
-                ) {
-                    await userQuestsModel.setCompleted(
-                        quest.user_id,
-                        quest.quest_id
-                    );
-                    await msg.channel.send({
-                        embed: {
-                            description: `**${user.name} quest completed!** ${
-                                quest.name
-                            }\n\n${quest.end_message ? quest.end_message : ''}`,
-                        },
-                    });
-                    continue;
-                }
+    async generateDailyQuests(userID, amount) {
+        // returns a string that should be outputted
+        const result = [];
+        for (let i = 0; i < amount; i++) {
+            let label;
+            let type =
+                i === 0 ? 'buy' : random.number(1, 4) < 4 ? 'sell' : 'buy';
 
-                // Add 1 to amount if needed
-                if (quest.totalAmount) {
-                    await userQuestsModel.addAmount(
-                        quest.user_id,
-                        quest.quest_id,
-                        amount
-                    );
-                }
+            if (type === 'buy') {
+                const set = await setsModel.getRandom();
+                const amount = random.number(1, 2);
+                label = `Buy ${amount} x ${set.name} booster`;
+            } else {
+                // Sell quest
+                const cardTypes = await cardsModel.getDistinctTypes();
+                const type = random.arrayValue(cardTypes);
+                const amount = random.number(1, 2);
+                label = `Sell ${amount} x cards of the type ${type}`;
             }
+
+            result.push(label);
         }
+
+        return result;
+    },
+
+    async check(discordUser, command, arg) {
+        // Checks if a user has a quest and adds + 1 to amount. Also checks if quest is completed!
     },
 };
