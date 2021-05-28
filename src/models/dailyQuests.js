@@ -52,4 +52,17 @@ module.exports = {
             );
         });
     },
+    async getActiveForUserAndTypeAndSubType(userID, type, subType) {
+        return new Promise((resolve) => {
+            const values = [userID, type, subType];
+            db.query(
+                `SELECT * FROM ${this.table} WHERE user_id = ? AND \`type\` = ? AND subType = ? AND completed = 0`,
+                values,
+                (err, rows) => {
+                    if (err) console.log(err);
+                    else resolve(true);
+                }
+            );
+        });
+    },
 };
