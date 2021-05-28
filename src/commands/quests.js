@@ -20,7 +20,7 @@ module.exports = {
                     0,
                     quests[i].expireTimestamp,
                     true
-                )})\n`;
+                )}) ${quests[i].progress}/${quests[i].amount}\n`;
         }
         msg.channel.send({
             embed: {
