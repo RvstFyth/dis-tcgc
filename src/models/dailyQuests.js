@@ -54,11 +54,28 @@ module.exports = {
     },
     async getActiveForUserAndTypeAndSubType(userID, type, subType) {
         return new Promise((resolve) => {
-            const values = [userID, type, subType];
+            const values = [
+                userID,
+                type,
+                subType,
+                valuesHelper.currentTimestamp(),
+            ];
             db.query(
-                `SELECT * FROM ${this.table} WHERE user_id = ? AND \`type\` = ? AND subType = ? AND completed = 0`,
+                `SELECT * FROM ${this.table} WHERE user_id = ? AND \`type\` = ? AND LOWER(subType) = ? AND completed = 0 AND expireTimestamp > ?`,
                 values,
                 (err, rows) => {
+                    if (err) console.log(err);
+                    else resolve(rows[0]);
+                }
+            );
+        });
+    },
+    async addProgress(id, amount = 1) {
+        return new Promise((resolve) => {
+            db.query(
+                `UPDATE ${this.table} SET progress = progress + ? WHERE id = ?`,
+                [amount, id],
+                (err) => {
                     if (err) console.log(err);
                     else resolve(true);
                 }
