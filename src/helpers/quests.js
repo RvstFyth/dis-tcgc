@@ -27,7 +27,7 @@ module.exports = {
                     label,
                     'booster',
                     '',
-                    250,
+                    amount,
                     expireTimestamp
                 );
             } else {
