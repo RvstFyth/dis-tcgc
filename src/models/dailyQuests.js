@@ -43,14 +43,12 @@ module.exports = {
     async getActiveForUser(userID) {
         return new Promise((resolve) => {
             db.query(
-                `SELECT * FROM ${this.table} WHERE user_id = ? AND expireTimestamp < ?`,
-                [
-                    valuesHelper.currentTimestamp(),
-                    (err, rows) => {
-                        if (err) console.log(err);
-                        else resolve(rows);
-                    },
-                ]
+                `SELECT * FROM ${this.table} WHERE user_id = ? AND expireTimestamp > ?`,
+                [userID, valuesHelper.currentTimestamp()],
+                (err, rows) => {
+                    if (err) console.log(err);
+                    else resolve(rows);
+                }
             );
         });
     },

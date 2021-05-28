@@ -1,12 +1,26 @@
 const dailyQuestsModel = require('../models/dailyQuests');
 const questsHelper = require('../helpers/quests');
+const valuesHelper = require('../helpers/values');
 
 module.exports = {
     async run(msg, args, data) {
-        const b = await questsHelper.generateDailyQuests(msg.author.id, 4);
+        let quests = await dailyQuestsModel.getActiveForUser(msg.author.id);
+        if (!quests || !quests.length) {
+            await questsHelper.generateDailyQuests(msg.author.id, 4);
+            quests = await dailyQuestsModel.getActiveForUser(msg.author.id);
+        }
+
         let res = '';
-        for (let a of b) {
-            res += `${a} (23h 54m 16s)\n`;
+        for (let i in quests) {
+            if (quests[i].completed) res += `- ~~${quests[i].label}~~\n`;
+            else
+                res += `- ${
+                    quests[i].label
+                } (${valuesHelper.formattedDifferenceBetweenTimestamp(
+                    0,
+                    quests[i].expireTimestamp,
+                    true
+                )})\n`;
         }
         msg.channel.send({
             embed: {
