@@ -3,6 +3,8 @@ const setsModel = require('../models/setsPokemon');
 const cardsModel = require('../models/cardsPokemon');
 const questsModel = require('../models/dailyQuests');
 const valuesHelper = require('../helpers/values');
+const boostersModel = require('../models/usersBoostersPokemon');
+const usersModel = require('../models/users');
 
 module.exports = {
     async generateDailyQuests(userID, amount) {
@@ -67,7 +69,31 @@ module.exports = {
         if (quest) {
             if (parseInt(quest.progress) + amount >= parseInt(quest.amount)) {
                 // Quest completed!
-                await msg.channel.send(`Quest completed!`);
+                await questsModel.setCompleted(quest.id);
+                let rewardString = '';
+                if (quest.rewardType === 'booster') {
+                    for (let i = 0; i < quest.rewardAmount; i++) {
+                        const randomSet = await setsModel.getRandom();
+                        await boostersModel.create(
+                            msg.author.id,
+                            randomSet.name
+                        );
+                        rewardString += `- ${randomSet.name} booster\n`;
+                    }
+                } else if (quest.rewardType === 'coins') {
+                    // Sell quest
+                    await usersModel.addCoins(
+                        msg.author.id,
+                        quest.rewardAmount
+                    );
+                    rewardString += `- ${quest.rewardAmount} coins\n`;
+                }
+                const embed = {
+                    title: `${msg.author.username} quest completed!`,
+                    description:
+                        quest.label + `\n\n**Rewards**:\n ${rewardString}`,
+                };
+                await msg.channel.send({ embed });
             } else await questsModel.addProgress(quest.id, amount);
         }
     },
