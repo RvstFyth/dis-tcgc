@@ -49,7 +49,7 @@ module.exports = {
                     expireTimestamp
                 );
             }
-            console.log(label);
+
             result.push(label);
         }
 
