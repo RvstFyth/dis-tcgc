@@ -4,6 +4,7 @@ const usersModel = require('../models/users');
 const shopModel = require('../models/shop');
 const valuesHelper = require('../helpers/values');
 const setsModel = require('../models/setsPokemon');
+const questsHelper = require('../helpers/quests');
 
 module.exports = {
     aliasses: ['buy'],
@@ -89,6 +90,7 @@ module.exports = {
         );
         for (let i = 0; i < amount; i++) {
             await usersBoostersPokemonModel.create(msg.author.id, input);
+            await questsHelper.check(msg, 'buy', input);
         }
         return msg.channel.send(
             `**${msg.author.username}** bought ${amount} x ${input} booster!`
