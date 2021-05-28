@@ -190,7 +190,8 @@ module.exports = {
         return new Promise((resolve) => {
             db.query(
                 `
-                    SELECT uc.*, cp.name, cp.id, cp.set, cp.rarity FROM ${this.table} AS uc
+                    SELECT uc.*, cp.name, cp.id, cp.set, cp.rarity, cp.types 
+                    FROM ${this.table} AS uc
                     INNER JOIN cards_pokemon AS cp ON uc.card_id = cp.id 
                     WHERE user_id = ? AND uc.amount > 1 ${extension}
                 `,
@@ -211,7 +212,8 @@ module.exports = {
         return new Promise((resolve) => {
             db.query(
                 `
-                    SELECT uc.*, cp.name, cp.id, cp.set, cp.rarity FROM ${this.table} AS uc
+                    SELECT uc.*, cp.name, cp.id, cp.set, cp.rarity, cp.types 
+                    FROM ${this.table} AS uc
                     INNER JOIN cards_pokemon AS cp ON uc.card_id = cp.id 
                     WHERE user_id = ? AND uc.amount > 1 AND cp.set = ? ${extension}
                 `,

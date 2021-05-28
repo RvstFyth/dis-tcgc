@@ -3,6 +3,7 @@ const userCardsModel = require('../models/usersCardsPokemon');
 const usersModel = require('../models/users');
 
 const input = require('../helpers/input');
+const questsHelper = require('../helpers/quests');
 
 module.exports = {
     async run(msg, args, data) {
@@ -56,6 +57,15 @@ module.exports = {
             for (let i in cards) {
                 totalCards += parseInt(cards[i].amount) - 1;
                 await userCardsModel.setAmount(msg.author.id, cards[i].id, 1);
+                const cardTypesParsed = cards[i].types.split('|');
+                for (let t of cardTypesParsed) {
+                    await questsHelper.check(
+                        msg,
+                        'sell',
+                        t,
+                        parseInt(cards[i].amount) - 1
+                    );
+                }
             }
 
             if (rarity === 'rare') result = totalCards * 75;
