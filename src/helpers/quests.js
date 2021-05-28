@@ -22,7 +22,7 @@ module.exports = {
                 await questsModel.create(
                     userID,
                     'buy',
-                    'booster',
+                    set.name.toLowerCase(),
                     amount,
                     label,
                     'booster',
@@ -56,7 +56,19 @@ module.exports = {
         return result;
     },
 
-    async check(discordUser, command, arg) {
+    async check(msg, command, arg, amount = 1) {
+        const discordUser = msg.author;
         // Checks if a user has a quest and adds + 1 to amount. Also checks if quest is completed!
+        const quest = await questsModel.getActiveForUserAndTypeAndSubType(
+            discordUser.id,
+            command,
+            arg
+        );
+        if (quest) {
+            if (parseInt(quest.progress) + amount >= parseInt(quest.amount)) {
+                // Quest completed!
+                await msg.channel.send(`Quest completed!`);
+            } else await questsModel.addProgress(quest.id, amount);
+        }
     },
 };
