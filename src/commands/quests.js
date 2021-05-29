@@ -14,14 +14,14 @@ module.exports = {
         for (let i in quests) {
             if (quests[i].completed) res += `- ~~${quests[i].label}~~\n`;
             else
-                res += `- ${
-                    quests[i].label
-                } (${valuesHelper.formattedDifferenceBetweenTimestamp(
-                    0,
-                    quests[i].expireTimestamp,
-                    true
-                )}) ${quests[i].progress}/${quests[i].amount}\n`;
+                res += `- ${quests[i].label} ${quests[i].progress}/${quests[i].amount}\n`;
         }
+        res += `\n\n${valuesHelper.formattedDifferenceBetweenTimestamp(
+            0,
+            quests[0].expireTimestamp,
+            true
+        )} before you can request new quests.`;
+
         msg.channel.send({
             embed: {
                 title: `${msg.author.username}'s quests`,
