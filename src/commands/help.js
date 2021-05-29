@@ -26,6 +26,7 @@ module.exports = {
                 `from DMs. Spamming and abuse won't be tolerated and can result in being banned!` +
                 `\n\n\`,start\` Creates a account and start collecting cards!\n` +
                 `\`,stats\` See stats about your collection\n` +
+                `\`,quests\` See quests you can complete for rewards\n` +
                 `\`,cards\` See the cards you collected\n` +
                 `\`,boosters\` To see your booster packs\n` +
                 `\`,shop\` To open the shop interface\n` +
@@ -48,7 +49,10 @@ module.exports = {
                 `\`,set [name] -o\` To query the cards you own from a set\n` +
                 `\`,set [name] -m\` To query the cards you miss from a set\n` +
                 `\`,set [name] -d -r=rare\` To query the duplicate cards of a set with rare as rarity \n` +
-                `Valid rarities: \`common|uncommon|rare|legend|promo\``,
+                `\`,set [name] -d -t=fire\` To query the duplicate cards of a set with fire type \n` +
+                `Valid rarities: \`common|uncommon|rare|legend|promo\`\n\n` +
+                `For valid set names, see \`,sets\` command\n` +
+                `For valid card types, see \`,types\` command`,
         }[arg];
     },
 };
