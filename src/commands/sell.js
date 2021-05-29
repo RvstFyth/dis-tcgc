@@ -127,6 +127,12 @@ module.exports = {
                     );
                 } else await userCardsModel.deleteFor(msg.author.id, card.id);
 
+                // Check for quest
+                const typesParsed = card.types.split('|');
+                for (let t of typesParsed) {
+                    await questsHelper.check(msg, 'sell', t, 1);
+                }
+
                 return msg.channel.send(
                     `**${msg.author.username}** sold ${card.name} for ${res} coins`
                 );
