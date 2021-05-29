@@ -125,11 +125,14 @@ module.exports = {
         });
     },
 
-    async getCardsForSetForUser(name, userID, rarity = null) {
+    async getCardsForSetForUser(name, userID, rarity = null, type = null) {
         let extension = '';
         if (rarity) {
-            if (rarity === 'rare') extension = ` AND cp.rarity LIKE '%rare%'`;
-            else extension = ` AND cp.rarity = '${rarity}'`;
+            if (rarity === 'rare') extension += ` AND cp.rarity LIKE '%rare%'`;
+            else extension += ` AND cp.rarity = '${rarity}'`;
+        }
+        if (type) {
+            extension += ` AND cp.types LIKE '%${type}%'`;
         }
         return new Promise((resolve) => {
             db.query(
@@ -147,11 +150,20 @@ module.exports = {
         });
     },
 
-    async getCardsForSetForUserDuplicates(name, userID, rarity = null) {
+    async getCardsForSetForUserDuplicates(
+        name,
+        userID,
+        rarity = null,
+        type = null
+    ) {
         let extension = '';
         if (rarity) {
-            if (rarity === 'rare') extension = ` AND cp.rarity LIKE '%rare%'`;
-            else extension = ` AND cp.rarity = '${rarity}'`;
+            if (rarity === 'rare') extension += ` AND cp.rarity LIKE '%rare%'`;
+            else extension += ` AND cp.rarity = '${rarity}'`;
+        }
+
+        if (type) {
+            extension += ` AND cp.types LIKE '%${type}%'`;
         }
 
         return new Promise((resolve) => {
@@ -170,13 +182,16 @@ module.exports = {
         });
     },
 
-    async getCardsForSetForUserOwned(name, userID, rarity = null) {
+    async getCardsForSetForUserOwned(name, userID, rarity = null, type = null) {
         return new Promise((resolve) => {
             let extension = '';
             if (rarity) {
                 if (rarity === 'rare')
-                    extension = ` AND cp.rarity LIKE '%rare%'`;
-                else extension = ` AND cp.rarity = '${rarity}'`;
+                    extension += ` AND cp.rarity LIKE '%rare%'`;
+                else extension += ` AND cp.rarity = '${rarity}'`;
+            }
+            if (type) {
+                extension += ` AND cp.types LIKE '%${type}%'`;
             }
 
             db.query(
@@ -194,11 +209,20 @@ module.exports = {
         });
     },
 
-    async getCardsForSetForUserMissing(name, userID, rarity = null) {
+    async getCardsForSetForUserMissing(
+        name,
+        userID,
+        rarity = null,
+        type = null
+    ) {
         let extension = '';
         if (rarity) {
-            if (rarity === 'rare') extension = ` AND cp.rarity LIKE '%rare%'`;
-            else extension = ` AND cp.rarity = '${rarity}'`;
+            if (rarity === 'rare') extension += ` AND cp.rarity LIKE '%rare%'`;
+            else extension += ` AND cp.rarity = '${rarity}'`;
+        }
+
+        if (type) {
+            extension += ` AND cp.types LIKE '%${type}%'`;
         }
 
         return new Promise((resolve) => {
