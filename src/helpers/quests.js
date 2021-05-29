@@ -11,27 +11,34 @@ module.exports = {
         // returns a string that should be outputted
         const result = [];
         const expireTimestamp = valuesHelper.currentTimestamp() + 86400;
-
-        for (let i = 0; i < amount; i++) {
+        let questsGiven = 0;
+        while (questsGiven < amount) {
             let label;
             let type =
-                i === 0 ? 'buy' : random.number(1, 4) < 4 ? 'sell' : 'buy';
+                questsGiven === 0
+                    ? 'buy'
+                    : random.number(1, 4) < 4
+                    ? 'sell'
+                    : 'buy';
 
             if (type === 'buy') {
                 const set = await setsModel.getRandom();
                 const amount = random.number(1, 2);
                 label = `Buy ${amount} x ${set.name} booster`;
-                await questsModel.create(
-                    userID,
-                    'buy',
-                    set.name.toLowerCase(),
-                    amount,
-                    label,
-                    'booster',
-                    '',
-                    amount,
-                    expireTimestamp
-                );
+                if (result.indexOf(label) < 0) {
+                    await questsModel.create(
+                        userID,
+                        'buy',
+                        set.name.toLowerCase(),
+                        amount,
+                        label,
+                        'booster',
+                        '',
+                        amount,
+                        expireTimestamp
+                    );
+                    questsGiven++;
+                }
             } else {
                 // Sell quest
                 const cardTypes = await cardsModel.getDistinctTypes();
@@ -39,17 +46,20 @@ module.exports = {
                 const amount = random.number(1, 2);
                 const rewardCoins = random.number(100, 200);
                 label = `Sell ${amount} x cards of the type ${type}`;
-                await questsModel.create(
-                    userID,
-                    'sell',
-                    type,
-                    amount,
-                    label,
-                    'coins',
-                    '',
-                    rewardCoins,
-                    expireTimestamp
-                );
+                if (result.indexOf(label) < 0) {
+                    await questsModel.create(
+                        userID,
+                        'sell',
+                        type,
+                        amount,
+                        label,
+                        'coins',
+                        '',
+                        rewardCoins,
+                        expireTimestamp
+                    );
+                    questsGiven++;
+                }
             }
 
             result.push(label);
