@@ -256,6 +256,8 @@ module.exports = {
                                     res.push(parsed[j]);
                             }
                         }
+
+                        res.sort((a, b) => a.localeCompare(b));
                         resolve(res);
                     }
                 }
