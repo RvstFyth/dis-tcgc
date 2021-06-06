@@ -113,6 +113,11 @@ client.on('message', async (msg) => {
                     `**${msg.author.username}** you are not registered yet, use \`${prefix}start\` to create a account`
                 );
 
+            if (user && user.banned)
+                return msg.channel.send(
+                    `**${msg.author.username} YOU ARE BANNED FROM THIS BOT... Join our support server if you think this is a mistake..** `
+                );
+
             const args = commandsHelper.parseArguments(msg, [
                 prefix,
                 command,

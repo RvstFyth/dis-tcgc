@@ -93,7 +93,7 @@ module.exports = {
     async getTopCoins(max = 7) {
         return new Promise((resolve) => {
             db.query(
-                `SELECT * FROM ${this.table} ORDER BY coins DESC LIMIT ${max}`,
+                `SELECT * FROM ${this.table} WHERE banned = 0 ORDER BY coins DESC LIMIT ${max}`,
                 (err, rows) => {
                     if (err) console.log(err);
                     else resolve(rows);
