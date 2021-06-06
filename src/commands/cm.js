@@ -58,7 +58,11 @@ module.exports = {
         const lastDrops = await dropsModel.getLastRecords(15);
         let description = '';
         for (let i in lastDrops) {
-            description += `-${lastDrops[i].timestamp} | ${lastDrops[i].user_id}\n`;
+            description += `${new Date(
+                lastDrops[i].timestamp * 1000
+            ).toLocaleString('nl-NL', { hour12: false })}} | ${
+                lastDrops[i].username
+            }\n`;
         }
         const embed = {
             title: `Last drops`,

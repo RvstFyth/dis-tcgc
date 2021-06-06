@@ -38,7 +38,12 @@ module.exports = {
     async getLastRecords(limit = 10) {
         return new Promise((resolve) => {
             db.query(
-                `SELECT * FROM ${this.table} ORDER BY id DESC LIMIT ?`,
+                `
+                    SELECT dr.*, users.username FROM 
+                    ${this.table} as dr
+                    INNER JOIN users ON users.discord_id = dr.user_id 
+                    ORDER BY id 
+                    DESC LIMIT ?`,
                 [limit],
                 (err, result) => {
                     if (err) console.log(err);
