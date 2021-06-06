@@ -146,7 +146,7 @@ client.on('message', async (msg) => {
         if (random.number(1, 100) === num || random.number(1, 100) === num2) {
             // Check is user is registered
             const user = await usersModel.getForDiscordID(msg.author.id);
-            if (user) {
+            if (user && !user.banned) {
                 const rarityNum = random.number(1, 100);
                 let rarity;
                 if (rarityNum < 2) rarity = 'rare';
