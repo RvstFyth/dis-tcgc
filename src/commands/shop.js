@@ -75,6 +75,11 @@ module.exports = {
                 `**${msg.author.username}** invalid set name provided..`
             );
 
+        if (set.name.toLowerCase() === 'shiny vault')
+            return msg.channel.send(
+                `**${msg.author.username}** this set can't be bought right now..`
+            );
+
         const activeSale = await shopModel.getActiveForSetID(set.id);
         if (activeSale) boosterPrice *= 0.75;
         const price = boosterPrice * amount;
