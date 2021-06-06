@@ -36,11 +36,15 @@ module.exports = {
         });
     },
     async getLastRecords(limit = 10) {
-        return new Promise(resolve => {
-            db.query(`SELECT * FROM ${this.table} ORDER BY id DESC LIMIT ?`, [limit], (err, result) => {
-                if(err) console.log(err);
-                     else resolve(result);
-            });
+        return new Promise((resolve) => {
+            db.query(
+                `SELECT * FROM ${this.table} ORDER BY id DESC LIMIT ?`,
+                [limit],
+                (err, result) => {
+                    if (err) console.log(err);
+                    else resolve(result);
+                }
+            );
         });
-    }
+    },
 };
