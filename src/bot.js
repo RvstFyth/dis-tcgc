@@ -145,6 +145,7 @@ client.on('message', async (msg) => {
         const num = random.number(1, 100);
         const num2 = random.number(1, 100);
         if (
+            1 === 1 ||
             random.number(1, 100) === num ||
             random.number(1, 100) === num2
         ) {
@@ -157,8 +158,8 @@ client.on('message', async (msg) => {
                 if (
                     lastDrop &&
                     !(
-                        parseInt(lastDrop.timestamp) + 10 * 60 >
-                        valuesHelper.currentTimestamp()
+                        valuesHelper.currentTimestamp() >
+                        parseInt(lastDrop.timestamp) + 10 * 60
                     )
                 )
                     return false;
