@@ -75,7 +75,10 @@ module.exports = {
                 `**${msg.author.username}** invalid set name provided..`
             );
 
-        if (set.name.toLowerCase() === 'shiny vault')
+        if (
+            set.name.toLowerCase() === 'shiny vault' ||
+            set.name.toLowerCase() === 'dragon vault'
+        )
             return msg.channel.send(
                 `**${msg.author.username}** this set can't be bought right now..`
             );
