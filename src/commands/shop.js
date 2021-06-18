@@ -5,6 +5,9 @@ const shopModel = require('../models/shop');
 const valuesHelper = require('../helpers/values');
 const setsModel = require('../models/setsPokemon');
 const questsHelper = require('../helpers/quests');
+const inHelper = require('../helpers/input');
+
+const opened = {};
 
 module.exports = {
     aliasses: ['buy'],
@@ -60,6 +63,10 @@ module.exports = {
     },
 
     async buy(msg, args, data) {
+        if (opened[msg.author.id])
+            return msg.channel.send(
+                `**${msg.author.username}** you already have a shop embed open..`
+            );
         let amount = 1,
             boosterPrice = 250;
 
@@ -91,6 +98,19 @@ module.exports = {
             return msg.channel.send(
                 `**${msg.author.username}** you don't have enough coins (${data.user.coins}), you need ${price} coins to buy ${amount} x booster. You get coins when a card drops or with bonus commands.`
             );
+
+        opened[msg.author.id] = true;
+        const confirmed = await inHelper.askUserToConfirm(
+            `**${msg.author.username}** confirm to buy ${amount} x ${set.name} booster(s) for ${price} coins`,
+            msg,
+            true
+        );
+        data.user = await usersModel.getForDiscordID(msg.author.id);
+        opened[msg.author.id] = false;
+
+        if (!confirmed || data.user.coins < price) {
+            return false;
+        }
 
         await usersModel.setCoins(
             msg.author.id,
