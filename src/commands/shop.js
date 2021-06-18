@@ -82,6 +82,8 @@ module.exports = {
                 `**${msg.author.username}** invalid set name provided..`
             );
 
+        boosterPrice = parseInt(set.price);
+
         if (
             set.name.toLowerCase() === 'shiny vault' ||
             set.name.toLowerCase() === 'dragon vault'
