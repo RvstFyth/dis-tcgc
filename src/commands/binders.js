@@ -13,7 +13,11 @@ module.exports = {
     },
 
     async list(msg, args, data) {
-        const binders = await bindersModel.getAllForUser(msg.author.id);
+        let userID;
+        if (msg.mentions.users.size) {
+            userID = msg.mentions.users.first().id;
+        } else userID = msg.author.id;
+        const binders = await bindersModel.getAllForUser(userID);
         let description;
         if (!binders || !binders.length)
             description = `No records yet... See \`,help binders\` to get started.`;
