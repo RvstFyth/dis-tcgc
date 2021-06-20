@@ -15,6 +15,19 @@ module.exports = {
         });
     },
 
+    async delete(binderID, cardID) {
+        return new Promise((resolve) => {
+            db.query(
+                `DELETE FROM ${this.table} WHERE binder_id = ? AND card_id = ?`,
+                [binderID, cardID],
+                (err) => {
+                    if (err) console.log(err);
+                    else resolve(true);
+                }
+            );
+        });
+    },
+
     async getAllForBinder(binderID) {
         return new Promise((resolve) => {
             db.query(
