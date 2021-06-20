@@ -60,6 +60,7 @@ module.exports = {
 
         const embed = {
             title: `${binder.name}`,
+            description: `Owner: ${binder.username}\nCards: ${data.length}`,
             image: {
                 url: 'attachment://image.png',
             },

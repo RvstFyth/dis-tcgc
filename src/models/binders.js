@@ -18,7 +18,7 @@ module.exports = {
     async get(ID) {
         return new Promise((resolve) => {
             db.query(
-                `SELECT * FROM ${this.table} WHERE id = ?`,
+                `SELECT bin.*, us.username FROM ${this.table} AS bin INNER JOIN users AS us ON bin.user_id = us.discord_id WHERE bin.id = ?`,
                 [ID],
                 (err, result) => {
                     if (err) console.log(err);
