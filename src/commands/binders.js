@@ -3,8 +3,13 @@ const bindersCardsModel = require('../models/bindersCards');
 const input = require('../helpers/input');
 const userCardsModel = require('../models/usersCardsPokemon');
 
+const viewModule = require('./binders/view');
+
 module.exports = {
     async run(msg, args, data) {
+        if (args[0] && !isNaN(args[0])) {
+            return viewModule.run(msg, args, data);
+        }
         switch (args[0]) {
             case 'create':
                 return this.create(msg, args, data);
