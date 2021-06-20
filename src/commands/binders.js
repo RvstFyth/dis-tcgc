@@ -6,6 +6,7 @@ const userCardsModel = require('../models/usersCardsPokemon');
 const viewModule = require('./binders/view');
 
 module.exports = {
+    aliasses: ['bn'],
     async run(msg, args, data) {
         if (args[0] && !isNaN(args[0])) {
             return viewModule.run(msg, args, data);
