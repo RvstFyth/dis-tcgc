@@ -28,6 +28,19 @@ module.exports = {
         });
     },
 
+    async deleteForBinderID(binderID) {
+        return new Promise((resolve) => {
+            db.query(
+                `DELETE FROM ${this.table} WHERE binder_id = ?`,
+                [binderID],
+                (err) => {
+                    if (err) console.log(err);
+                    else resolve(true);
+                }
+            );
+        });
+    },
+
     async getAllForBinder(binderID) {
         return new Promise((resolve) => {
             db.query(

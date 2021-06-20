@@ -41,6 +41,15 @@ module.exports = {
         });
     },
 
+    async delete(ID) {
+        return new Promise((resolve) => {
+            db.query(`DELETE FROM ${this.table} WHERE id = ?`, [ID], (err) => {
+                if (err) console.log(err);
+                else resolve(true);
+            });
+        });
+    },
+
     async getAllForUser(userID) {
         return new Promise((resolve) => {
             db.query(
