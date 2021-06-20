@@ -124,8 +124,24 @@ module.exports = {
             msg.author.id,
             parseInt(data.user.coins) - boosterPrice * amount
         );
+
+        const boosterRecord = await usersBoostersPokemonModel.getSingleForUser(
+            msg.author.id,
+            set.id
+        );
+        if (!boosterRecord)
+            await usersBoostersPokemonModel.create(
+                msg.author.id,
+                set.id,
+                amount
+            );
+        else
+            usersBoostersPokemonModel.setAmount(
+                boosterRecord.id,
+                parseInt(boosterRecord.amount) + amount
+            );
+
         for (let i = 0; i < amount; i++) {
-            await usersBoostersPokemonModel.create(msg.author.id, set.name);
             await questsHelper.check(msg, 'buy', set.name);
         }
         return msg.channel.send(

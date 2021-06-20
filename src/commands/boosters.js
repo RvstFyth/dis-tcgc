@@ -21,11 +21,11 @@ module.exports = {
             msg.author.id
         );
 
-        let description = '';
+        let description = '**ID - name - (amount)**\n';
         for (let i in boosters) {
-            description += `${boosters[i].booster} (${boosters[i].total}) \n`;
+            description += `${boosters[i].set_id} - ${boosters[i].name} (${boosters[i].amount}) \n`;
         }
-        if (!description)
+        if (!boosters || !boosters.length)
             description = `You don't have any booster packs, you can buy them with the \`,shop\` command.`;
 
         const embed = {
@@ -54,13 +54,19 @@ module.exports = {
         const amountInPack = 10;
         const record = await usersBoostersPokemonModel.getSingleForUser(
             msg.author.id,
-            set.name
+            set.id
         );
         if (!record)
             return msg.channel.send(
                 `**${msg.author.username}** you don't have any ${set.name} booster packs`
             );
-        await usersBoostersPokemonModel.delete(record.id);
+        if (parseInt(record.amount) === 1)
+            await usersBoostersPokemonModel.delete(record.id);
+        else
+            await usersBoostersPokemonModel.setAmount(
+                record.id,
+                parseInt(record.amount) - 1
+            );
         const fields = [];
         for (let i = 0; i < amountInPack; i++) {
             let card;
@@ -89,11 +95,8 @@ module.exports = {
                 });
             }
         }
-        const userBoosterCount = await usersBoostersPokemonModel.getCountForUser(
-            msg.author.id,
-            set.name
-        );
-        if (userBoosterCount && userBoosterCount > 0) {
+
+        if (record.amount > 1) {
             fields.push({
                 name: '\u200b',
                 value: `React with ${nextEmoji} to open another booster from this set`,
@@ -105,7 +108,7 @@ module.exports = {
         };
 
         return msg.channel.send({ embed }).then(async (message) => {
-            if (userBoosterCount && userBoosterCount > 0) {
+            if (record.amount > 1) {
                 await message.react(nextEmoji);
                 const filter = (reaction, user) =>
                     reaction.emoji.name === nextEmoji &&
