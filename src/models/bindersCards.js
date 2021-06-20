@@ -31,7 +31,7 @@ module.exports = {
     async getAllForBinder(binderID) {
         return new Promise((resolve) => {
             db.query(
-                `SELECT * FROM ${this.table} WHERE binder_id = ?`,
+                `SELECT bc.*, pc.name, pc.set FROM ${this.table} AS bc INNER JOIN cards_pokemon AS pc ON pc.id = bc.card_id WHERE bc.binder_id = ?`,
                 [binderID],
                 (err, result) => {
                     if (err) console.log(err);
