@@ -47,32 +47,46 @@ module.exports = {
                 `**${msg.author.username}** not enough arguments..`
             );
 
-        const input = args.join(' ');
-        let cards;
+        let cards, set;
+
+        if (!isNaN(args[0])) {
+            set = await setsPokemonModel.get(args[0]);
+        } else {
+            const input = args.join(' ');
+            set = await setsPokemonModel.getForName(input);
+        }
+
+        if (!set) {
+            return msg.channel.send(
+                `**${
+                    msg.author.username
+                }** there is no set for argument ${args.join(' ')}`
+            );
+        }
         if (owned)
             cards = await cardsPokemonModel.getCardsForSetForUserOwned(
-                input,
+                set.name,
                 msg.author.id,
                 rarityFilter,
                 typeFilter
             );
         else if (missing)
             cards = await cardsPokemonModel.getCardsForSetForUserMissing(
-                input,
+                set.name,
                 msg.author.id,
                 rarityFilter,
                 typeFilter
             );
         else if (duplicates)
             cards = await cardsPokemonModel.getCardsForSetForUserDuplicates(
-                input,
+                set.name,
                 msg.author.id,
                 rarityFilter,
                 typeFilter
             );
         else
             cards = await cardsPokemonModel.getCardsForSetForUser(
-                input,
+                set.name,
                 msg.author.id,
                 rarityFilter,
                 typeFilter
@@ -83,7 +97,7 @@ module.exports = {
                 `**${msg.author.username}** no cards found..`
             );
 
-        const pSet = await setsPokemonModel.getForName(input);
+        const pSet = await setsPokemonModel.getForName(set.name);
 
         return this.postEmbed(msg, cards, pSet);
     },
