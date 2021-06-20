@@ -15,6 +15,14 @@ module.exports = {
             );
         });
     },
+    async getAll() {
+        return new Promise((resolve) => {
+            db.query(`SELECT * FROM ${this.table}`, (err, result) => {
+                if (err) console.log(err);
+                else resolve(result);
+            });
+        });
+    },
     async getForName(name) {
         return new Promise((resolve) => {
             db.query(
