@@ -1,6 +1,7 @@
 const usersBoostersPokemonModel = require('../models/usersBoostersPokemon');
 const usersCardsPokemonModel = require('../models/usersCardsPokemon');
 const cardsPokemonModel = require('../models/cardsPokemon');
+const setsModel = require('../models/setsPokemon');
 
 const nextEmoji = '⏭️';
 
@@ -43,15 +44,21 @@ module.exports = {
 
     async open(msg, args, data) {
         args = args.filter((a) => a !== 'open');
-        const input = args.join(' ');
+        let set;
+        if (!isNaN(args[0])) {
+            set = await setsModel.get(args[0]);
+        } else {
+            set = await setsModel.getForName(args.join(' '));
+        }
+
         const amountInPack = 10;
         const record = await usersBoostersPokemonModel.getSingleForUser(
             msg.author.id,
-            input
+            set.name
         );
         if (!record)
             return msg.channel.send(
-                `**${msg.author.username}** you don't have any ${input} booster packs`
+                `**${msg.author.username}** you don't have any ${set.name} booster packs`
             );
         await usersBoostersPokemonModel.delete(record.id);
         const fields = [];
@@ -59,20 +66,20 @@ module.exports = {
             let card;
             if (i === 0)
                 card = await cardsPokemonModel.getRandomForSetAndRarity(
-                    input,
+                    set.name,
                     'rare'
                 );
             else if (i < 4)
                 card = await cardsPokemonModel.getRandomForSetAndRarity(
-                    input,
+                    set.name,
                     'uncommon'
                 );
             else
                 card = await cardsPokemonModel.getRandomForSetAndRarity(
-                    input,
+                    set.name,
                     'common'
                 );
-            if (!card) card = await cardsPokemonModel.getRandomForSet(input);
+            if (!card) card = await cardsPokemonModel.getRandomForSet(set.name);
             if (card) {
                 await usersCardsPokemonModel.add(msg.author.id, card.id, 1);
                 fields.push({
@@ -84,7 +91,7 @@ module.exports = {
         }
         const userBoosterCount = await usersBoostersPokemonModel.getCountForUser(
             msg.author.id,
-            input
+            set.name
         );
         if (userBoosterCount && userBoosterCount > 0) {
             fields.push({
