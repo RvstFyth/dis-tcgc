@@ -90,13 +90,13 @@ module.exports = {
 
         boosterPrice = parseInt(set.price);
 
-        if (
-            set.name.toLowerCase() === 'shiny vault' ||
-            set.name.toLowerCase() === 'dragon vault'
-        )
-            return msg.channel.send(
-                `**${msg.author.username}** this set can't be bought right now..`
-            );
+        // if (
+        //     set.name.toLowerCase() === 'shiny vault' ||
+        //     set.name.toLowerCase() === 'dragon vault'
+        // )
+        //     return msg.channel.send(
+        //         `**${msg.author.username}** this set can't be bought right now..`
+        //     );
 
         const activeSale = await shopModel.getActiveForSetID(set.id);
         if (activeSale) boosterPrice *= 0.75;
