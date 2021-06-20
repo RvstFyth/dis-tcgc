@@ -84,10 +84,7 @@ module.exports = {
                 if (quest.rewardType === 'booster') {
                     for (let i = 0; i < quest.rewardAmount; i++) {
                         const randomSet = await setsModel.getRandom();
-                        await boostersModel.create(
-                            msg.author.id,
-                            randomSet.name
-                        );
+                        await boostersModel.create(msg.author.id, randomSet.id);
                         rewardString += `- ${randomSet.name} booster\n`;
                     }
                 } else if (quest.rewardType === 'coins') {

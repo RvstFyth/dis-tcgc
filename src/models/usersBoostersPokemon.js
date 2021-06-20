@@ -28,24 +28,6 @@ module.exports = {
         });
     },
 
-    async getCountForUser(userID, setID) {
-        return new Promise((resolve) => {
-            db.query(
-                `SELECT count(*) AS total FROM ${this.table} WHERE user_id = ? AND set_id = ? LIMIT 1`,
-                [userID, setID],
-                (err, rows) => {
-                    if (err) console.log(err);
-                    else
-                        resolve(
-                            rows[0] && rows[0].amount
-                                ? parseInt(rows[0].amount)
-                                : 0
-                        );
-                }
-            );
-        });
-    },
-
     async getAllForUserGrouped(userID) {
         return new Promise((resolve) => {
             db.query(
