@@ -22,10 +22,10 @@ module.exports = {
             );
 
         const offers = await shopModel.getActive();
-        const activeField = { name: 'Sales (-25%)', value: '' };
+        const activeField = { name: 'Sales (-25%)', value: '**ID - Name**\n' };
         let cnt = 1;
         for (let i in offers) {
-            activeField.value += `**${cnt}**: ${
+            activeField.value += `**${offers[i].set_id}**: ${
                 offers[i].name
             } (${valuesHelper.formattedDifferenceBetweenTimestamp(
                 0,
