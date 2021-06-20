@@ -37,6 +37,15 @@ module.exports = {
                     `**${msg.author.username}** you don't own a card with ID ${cardID}..`
                 );
 
+            const existing = await bindersCardsModel.recordExists(
+                binderID,
+                cardID
+            );
+            if (existing)
+                return msg.channel.send(
+                    `**${msg.author.username}** you already have this card in ${binder.name}`
+                );
+
             await bindersCardsModel.create(binderID, cardID);
             return msg.channel.send(
                 `**${msg.author.username}** added ${cardID} to ${binder.name}`

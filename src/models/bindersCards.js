@@ -27,4 +27,17 @@ module.exports = {
             );
         });
     },
+
+    async recordExists(binderID, cardID) {
+        return new Promise((resolve) => {
+            db.query(
+                `SELECT * FROM ${this.table} WHERE binder_id = ? AND card_id = ?`,
+                [binderID, cardID],
+                (err, result) => {
+                    if (err) console.log(err);
+                    else resolve(result.length && result.length > 0);
+                }
+            );
+        });
+    },
 };
