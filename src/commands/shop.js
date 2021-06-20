@@ -70,13 +70,19 @@ module.exports = {
         let amount = 1,
             boosterPrice = 250;
 
-        if (args[0] && !isNaN(args[0]) && args[0] > 0) {
+        if (args[0] && !isNaN(args[0]) && args[0] > 0 && args[1]) {
             amount = parseInt(args[0]);
             args = args.splice(1);
         }
 
-        const input = args.join(' ');
-        const set = await setsModel.getForName(input);
+        let set;
+
+        if (!isNaN(args[0])) {
+            set = await setsModel.get(args[0]);
+        } else {
+            set = await setsModel.getForName(args.join(' '));
+        }
+
         if (!set)
             return msg.channel.send(
                 `**${msg.author.username}** invalid set name provided..`
@@ -119,11 +125,11 @@ module.exports = {
             parseInt(data.user.coins) - boosterPrice * amount
         );
         for (let i = 0; i < amount; i++) {
-            await usersBoostersPokemonModel.create(msg.author.id, input);
-            await questsHelper.check(msg, 'buy', input);
+            await usersBoostersPokemonModel.create(msg.author.id, set.name);
+            await questsHelper.check(msg, 'buy', set.name);
         }
         return msg.channel.send(
-            `**${msg.author.username}** bought ${amount} x ${input} booster!`
+            `**${msg.author.username}** bought ${amount} x ${set.name} booster!`
         );
     },
 };
