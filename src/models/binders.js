@@ -15,6 +15,19 @@ module.exports = {
         });
     },
 
+    async getForUser(ID, userID) {
+        return new Promise((resolve) => {
+            db.query(
+                `SELECT * FROM ${this.table} WHERE id = ? AND user_id = ?`,
+                [ID, userID],
+                (err, result) => {
+                    if (err) console.log(err);
+                    else resolve(result[0]);
+                }
+            );
+        });
+    },
+
     async getAllForUser(userID) {
         return new Promise((resolve) => {
             db.query(

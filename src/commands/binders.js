@@ -1,14 +1,46 @@
 const bindersModel = require('../models/binders');
+const bindersCardsModel = require('../models/bindersCards');
 const input = require('../helpers/input');
+const userCardsModel = require('../models/usersCardsPokemon');
 
 module.exports = {
     async run(msg, args, data) {
         switch (args[0]) {
             case 'create':
                 return this.create(msg, args, data);
+            case 'add':
+                return this.add(msg, args, data);
             case 'list':
             default:
                 return this.list(msg, args, data);
+        }
+    },
+
+    async add(msg, args, data) {
+        const binderID = !isNaN(args[1]) ? parseInt(args[1]) : null;
+        const cardID = !isNaN(args[2]) ? parseInt(args[2]) : null;
+        if (binderID && cardID) {
+            const binder = await bindersModel.getForUser(
+                binderID,
+                msg.author.id
+            );
+            if (!binder)
+                return msg.channel.send(
+                    `**${msg.author.username}** you don't own a binder with ID ${binderID}..`
+                );
+            const userCards = await userCardsModel.getForUser(
+                msg.author.id,
+                cardID
+            );
+            if (!userCards || userCards.amount < 1)
+                return msg.channel.send(
+                    `**${msg.author.username}** you don't own a card with ID ${cardID}..`
+                );
+
+            await bindersCardsModel.create(binderID, cardID);
+            return msg.channel.send(
+                `**${msg.author.username}** added ${cardID} to ${binder.name}`
+            );
         }
     },
 
