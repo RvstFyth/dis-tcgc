@@ -25,10 +25,10 @@ module.exports = {
         const dData = [...data];
         const sets = dData.splice(offset, limit);
 
-        let description = '**ID | Name**\n';
+        let description = '**ID - Name (series) | price**\n';
 
         for (let i in sets) {
-            description += `#${sets[i].id} - ${sets[i].name}\n`;
+            description += `${sets[i].id} - ${sets[i].name} (${sets[i].series}) | ${sets[i].price}\n`;
         }
 
         if (!description) description = '...';
