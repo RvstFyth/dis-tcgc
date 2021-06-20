@@ -63,6 +63,9 @@ module.exports = {
             image: {
                 url: 'attachment://image.png',
             },
+            footer: {
+                text: `Page ${page}/${maxPage}`,
+            },
         };
 
         return msg.channel
