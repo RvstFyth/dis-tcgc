@@ -8,15 +8,8 @@ module.exports = {
         if (args[0] && !isNaN(args[0])) {
             return viewModule.run(msg, args, data);
         }
-        switch (args[0]) {
-            case 'create':
-                return this.create(msg, args, data);
-            case 'add':
-                return this.add(msg, args, data);
-            case 'list':
-            default:
-                return this.list(msg, args, data);
-        }
+
+        return this.list(msg, args, data);
     },
 
     async list(msg, args, data) {
