@@ -1,0 +1,30 @@
+const db = require('../db').getConnection();
+
+module.exports = {
+    table: 'binders_cards',
+    async create(binderID, cardID) {
+        return new Promise((resolve) => {
+            db.query(
+                `INSERT INTO ${this.table} (binder_id, card_id) VALUES (?,?)`,
+                [binderID, cardID],
+                (err, result) => {
+                    if (err) console.log(err);
+                    else resolve(result.insertId);
+                }
+            );
+        });
+    },
+
+    async getAllForBinder(binderID) {
+        return new Promise((resolve) => {
+            db.query(
+                `SELECT * FROM ${this.table} WHERE binder_id = ?`,
+                [binderID],
+                (err, result) => {
+                    if (err) console.log(err);
+                    else resolve(result);
+                }
+            );
+        });
+    },
+};
