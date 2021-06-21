@@ -16,9 +16,8 @@ const query = util.promisify(con.query).bind(con);
             );
             for (let j in boosters) {
                 const set = await query(
-                    `SELECT * FROM sets_pokemon WHERE LOWER(name) = '${boosters[
-                        j
-                    ].booster.toLowerCase()}'`
+                    `SELECT * FROM sets_pokemon WHERE LOWER(name) = ?`,
+                    [boosters[j].booster.toLowerCase()]
                 );
                 if (set[0])
                     await query(
