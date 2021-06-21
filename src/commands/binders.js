@@ -26,6 +26,7 @@ module.exports = {
             for (let i in binders) {
                 description += `${binders[i].id} - ${binders[i].name} \n`;
             }
+            description += `\nSee \`${data.prefix}help binders\` for the help files`;
         }
 
         const embed = {

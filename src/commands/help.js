@@ -53,6 +53,15 @@ module.exports = {
                 `Valid rarities: \`common|uncommon|rare|legend|promo\`\n\n` +
                 `For valid set names, see \`,sets\` command\n` +
                 `For valid card types, see \`,types\` command`,
+            binders:
+                `\`,binders\` Lists your binders.\n` +
+                `\`,binders @mention\` Lists mentioned user binders.\n` +
+                `\`,binder [binderID]\` View a binder.\n` +
+                `\`,binders create [name]\` Create a new binder.\n` +
+                `\`,binders delete [binderID]\` Delete a binder.\n` +
+                `\`,binders txt [binderID]\` Text version of a binder.\n\n` +
+                `\`,binders add [binderID] [cardID]\` Add a card.\n` +
+                `\`,binders remove [binderID] [cardID]\` Removes a card.\n`,
         }[arg];
     },
 };
