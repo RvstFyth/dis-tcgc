@@ -51,6 +51,10 @@ module.exports = {
             set = await setsModel.getForName(args.join(' '));
         }
 
+        if (!set)
+            return msg.channel.send(
+                `**${msg.author.username}** invalid set provided..`
+            );
         const amountInPack = 10;
         const record = await usersBoostersPokemonModel.getSingleForUser(
             msg.author.id,
