@@ -2,6 +2,9 @@ const usersModel = require('../models/users');
 const userCardsModel = require('../models/usersCardsPokemon');
 const cardsModel = require('../models/cardsPokemon');
 const dropsModel = require('../models/drops');
+const setsModel = require('../models/setsPokemon');
+const boostersModel = require('../models/usersBoostersPokemon');
+const input = require('../helpers/input');
 
 const adminIDs = ['377092395931795458'];
 
@@ -11,6 +14,50 @@ module.exports = {
             if (args[0] === 'gcoins') return this.gcoins(msg, args, data);
             if (args[0] === 'gcard') return this.gcard(msg, args, data);
             if (args[0] === 'drops') return this.drops(msg, args, data);
+            if (args[0] === 'gboosters') return this.gboosters(msg, args, data);
+        }
+    },
+
+    async gboosters(msg, args, data) {
+        if (!msg.mentions.users.size || !args[1]) {
+            return msg.reply(
+                `**${msg.author.username}** invalid syntax... \n\`${data.prefix}cm gboosters <amount> [setName|setID] @mention\``
+            );
+        }
+        const mention = msg.mentions.users.first();
+        let amount = 1;
+        if (args[1] && !isNaN(args[1])) {
+            amount = parseInt(args[1]);
+            args = args.slice(2);
+        } else args = args.slice(1);
+
+        let set;
+        if (!isNaN(args[0])) {
+            set = await setsModel.get(args[0]);
+        } else set = await setsModel.getForName(args.join(' '));
+
+        if (set) {
+            const confirmed = await input.askUserToConfirm(
+                `Confirm to give ${mention.username} ${amount} x ${set.name}`,
+                msg,
+                true
+            );
+            if (confirmed) {
+                const existing = await boostersModel.getSingleForUser(
+                    mention.id,
+                    set.id
+                );
+                if (existing)
+                    await boostersModel.setAmount(
+                        existing.id,
+                        parseInt(existing.amount) + amount
+                    );
+                else await boostersModel.create(mention.id, set.id, amount);
+
+                return msg.channel.send(
+                    `**${mention.username}** received ${amount} x ${set.name}`
+                );
+            }
         }
     },
 
