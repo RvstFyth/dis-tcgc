@@ -2,6 +2,7 @@ const cardsPokemonModel = require('../models/cardsPokemon');
 const usersCardsPokemonModel = require('../models/usersCardsPokemon');
 
 module.exports = {
+    aliasses: ['c'],
     async run(msg, args, data) {
         if (isNaN(args[0]))
             return msg.channel.send(

@@ -6,6 +6,7 @@ const usersModel = require('../models/users');
 const random = require('../helpers/random');
 
 module.exports = {
+    aliasses: ['day', 'dl'],
     async run(msg, args, data) {
         const cooldowns = await cooldownsModel.getFor(msg.author.id);
         const ts = valuesHelper.currentTimestamp();
@@ -13,14 +14,14 @@ module.exports = {
         if (ts < cooldowns.daily) {
             const diff = ts - parseInt(cooldowns.daily);
             let description = `**${
-                    msg.author.username
-                }** you have to wait ${valuesHelper.formattedDifferenceBetweenTimestamp(
-                    ts,
-                    diff,
-                    true
-                )} for next daily bonus..\n\n **You can reset your daily (and claim it again) by** [voting for this bot on top.gg](https://top.gg/bot/821802913533657138/vote)`;
+                msg.author.username
+            }** you have to wait ${valuesHelper.formattedDifferenceBetweenTimestamp(
+                ts,
+                diff,
+                true
+            )} for next daily bonus..\n\n **You can reset your daily (and claim it again) by** [voting for this bot on top.gg](https://top.gg/bot/821802913533657138/vote)`;
             const embed = { description };
-            return msg.channel.send({embed});
+            return msg.channel.send({ embed });
         } else {
             await cooldownsModel.setDaily(msg.author.id);
             const coins = random.number(250, 500);
@@ -30,7 +31,7 @@ module.exports = {
             for (let i = 0, iEnd = cardBonus; i < iEnd; i++) {
                 const rarityRoll = random.number(1, 100);
                 let rarity;
-                if(i === 0 || rarityRoll <= 1) rarity = 'rare'; 
+                if (i === 0 || rarityRoll <= 1) rarity = 'rare';
                 else if (rarityRoll <= 20) rarity = 'uncommon';
                 else rarity = 'common';
                 const card = await cardsPokemonModel.getRandomForRarity(rarity);

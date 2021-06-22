@@ -8,6 +8,7 @@ const remindersModel = require('../models/reminders');
 const reminderEmoji = '⏰';
 
 module.exports = {
+    aliasses: ['hr'],
     async run(msg, args, data) {
         const cooldowns = await cooldownsModel.getFor(msg.author.id);
         const ts = valuesHelper.currentTimestamp();

@@ -1,4 +1,5 @@
 module.exports = {
+    aliasses: ['h'],
     async run(msg, args, data) {
         let description = this.getDescription(args[0]);
         if (!description) description = this.getDescription('main');

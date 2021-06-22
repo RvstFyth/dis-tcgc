@@ -3,6 +3,7 @@ const questsHelper = require('../helpers/quests');
 const valuesHelper = require('../helpers/values');
 
 module.exports = {
+    aliasses: ['q'],
     async run(msg, args, data) {
         let quests = await dailyQuestsModel.getActiveForUser(msg.author.id);
         if (!quests || !quests.length) {
