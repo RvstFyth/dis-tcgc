@@ -70,6 +70,11 @@ module.exports = {
         let amount = 1,
             boosterPrice = 250;
 
+        let confirmed = args.filter((a) => a === '-c').length;
+        if (confirmed) {
+            args = args.filter((a) => a !== '-c');
+        }
+
         if (args[0] && !isNaN(args[0]) && args[0] > 0 && args[1]) {
             amount = parseInt(args[0]);
             args = args.splice(1);
@@ -108,11 +113,13 @@ module.exports = {
             );
 
         opened[msg.author.id] = true;
-        const confirmed = await inHelper.askUserToConfirm(
-            `**${msg.author.username}** confirm to buy ${amount} x ${set.name} booster(s) for ${price} coins`,
-            msg,
-            true
-        );
+        if (!confirmed) {
+            confirmed = await inHelper.askUserToConfirm(
+                `**${msg.author.username}** confirm to buy ${amount} x ${set.name} booster(s) for ${price} coins`,
+                msg,
+                true
+            );
+        }
         data.user = await usersModel.getForDiscordID(msg.author.id);
         opened[msg.author.id] = false;
 
