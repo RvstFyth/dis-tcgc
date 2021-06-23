@@ -25,6 +25,7 @@ module.exports = {
                 `The bot only needs the perms to read messages to get started. It's advised to create a separate ` +
                 `channel where the bot can post messages. \n\nYou can trigger commands in a DM with the bot, but no cards will drop ` +
                 `from DMs. Spamming and abuse won't be tolerated and can result in being banned!` +
+                `\n\nJoin our [Support server](https://discord.gg/Un9vEZUqNu) for giveaways or any questions you have!` +
                 `\n\n\`,start\` Creates a account and start collecting cards!\n` +
                 `\`,stats\` See stats about your collection\n` +
                 `\`,quests\` See quests you can complete for rewards\n` +
