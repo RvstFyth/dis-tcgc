@@ -204,6 +204,26 @@ module.exports = {
         });
     },
 
+    async getForUserAndNameLike(userID, nameLike) {
+        let extension;
+
+        return new Promise((resolve) => {
+            db.query(
+                `
+                    SELECT uc.*, cp.name, cp.id, cp.set, cp.rarity, cp.types 
+                    FROM ${this.table} AS uc
+                    INNER JOIN cards_pokemon AS cp ON uc.card_id = cp.id 
+                    WHERE user_id = ? AND cp.name LIKE '%${nameLike}%'
+                `,
+                [userID],
+                (err, rows) => {
+                    if (err) console.log(err);
+                    else resolve(rows);
+                }
+            );
+        });
+    },
+
     async getDuplicatesForUserAndSetAndRarity(userID, set, rarity) {
         let extension;
         if (rarity === 'rare') extension = ` AND cp.rarity LIKE '%rare%'`;
