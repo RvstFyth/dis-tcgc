@@ -1,7 +1,12 @@
 const cardsPokemonModel = require('../models/cardsPokemon');
+const userCardsModel = require('../models/usersCardsPokemon');
 
 module.exports = {
     async run(msg, args, data) {
+        // Filter flags
+        const owned = args.filter((a) => a === '-o').length;
+
+        args = args.filter((a) => !a.startsWith('-'));
         let page = 1;
         if (!isNaN(args[args.length - 1])) {
             page = parseInt(args[args.length - 1]);
@@ -12,7 +17,13 @@ module.exports = {
                 `**${msg.author.username}** not enough arguments...`
             );
 
-        let cards = await cardsPokemonModel.getForName(args.join(' '));
+        let cards;
+        if (owned)
+            cards = await userCardsModel.getForUserAndNameLike(
+                msg.author.id,
+                args.join('')
+            );
+        else cards = await cardsPokemonModel.getForName(args.join(' '));
         const limit = 10;
         let maxPage = 0,
             offset = 0,
