@@ -109,6 +109,9 @@ module.exports = {
         const embed = {
             title: `${msg.author.username}`,
             fields,
+            thumbnail: {
+                url: set.symbol,
+            },
         };
 
         return msg.channel.send({ embed }).then(async (message) => {
